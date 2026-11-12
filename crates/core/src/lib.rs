@@ -9,6 +9,7 @@
 
 pub mod assets;
 pub mod datamodel;
+pub mod geometry;
 pub mod project;
 pub mod scene;
 pub mod schema;

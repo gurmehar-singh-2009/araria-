@@ -1,0 +1,10 @@
+[package]
+name = "araria-physics"
+description = "Araria's physics layer: a Rapier world mirroring the data model, character controller, queries and touch events."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-core = { workspace = true }
+rapier3d = { version = "0.36.1", default-features = false, features = ["dim3", "f32", "std"] }
