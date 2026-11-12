@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="description" content="Araria — play and create 3D games in your browser. No account needed." />
+    <meta name="theme-color" content="#0e1018" />
+    <title>Araria</title>
+    <link data-trunk rel="rust" href="../crates/app/Cargo.toml" data-bin="araria" data-cargo-profile="wasm-release" data-wasm-opt="s" />
+    <link data-trunk rel="copy-dir" href="../assets" />
+    <style>
+      html, body { margin: 0; height: 100%; background: #0e1018; overflow: hidden; }
+      canvas { display: block; width: 100%; height: 100%; outline: none; }
+    </style>
+  </head>
+  <body>
+    <canvas id="araria-canvas"></canvas>
+  </body>
+</html>

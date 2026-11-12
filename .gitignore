@@ -1,0 +1,15 @@
+/target
+/dist
+/web/dist
+**/*.rs.bk
+*.blend1
+*.blend
+.DS_Store
+.idea
+.vscode
+/tools/blender/out
+/tools/blender/__pycache__
+__pycache__/
+*.pyc
+/.trunk
+/data

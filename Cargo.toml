@@ -1,0 +1,60 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+default-members = ["crates/app"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://example.invalid/araria"
+
+[workspace.dependencies]
+araria-lua = { path = "crates/lua" }
+araria-core = { path = "crates/core" }
+araria-script = { path = "crates/script" }
+araria-physics = { path = "crates/physics" }
+araria-storage = { path = "crates/storage" }
+araria-net = { path = "crates/net" }
+araria-engine = { path = "crates/engine" }
+araria-studio = { path = "crates/studio" }
+araria-platform = { path = "crates/platform" }
+
+bevy = { version = "0.20.1", default-features = false, features = [
+    "3d",
+    "audio",
+    "wav",
+    "jpeg",
+] }
+bevy_egui = { version = "0.43.1", default-features = false, features = [
+    "manage_clipboard",
+    "open_url",
+    "render",
+] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+log = "0.4"
+
+# Keep our own code quick to rebuild while dependencies stay fast at runtime.
+[profile.dev]
+opt-level = 1
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+opt-level = 3
+debug = false
+
+[profile.release]
+opt-level = 3
+codegen-units = 16
+debug = false
+strip = true
+
+# Size-focused profile used for the shipped browser build (`trunk build --release`).
+[profile.wasm-release]
+inherits = "release"
+opt-level = "s"
+codegen-units = 1
+lto = "thin"
+panic = "abort"
