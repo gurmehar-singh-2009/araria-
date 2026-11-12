@@ -1,0 +1,9 @@
+[package]
+name = "araria-lua"
+description = "A sandboxed Lua 5.4-style virtual machine in pure Rust (runs natively and on wasm32-unknown-unknown)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+indexmap = "2"
