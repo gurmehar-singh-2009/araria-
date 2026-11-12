@@ -263,6 +263,9 @@ dependencies = [
 name = "araria"
 version = "0.1.0"
 dependencies = [
+ "araria-core",
+ "araria-engine",
+ "araria-runtime",
  "bevy",
  "bevy_egui",
  "console_error_panic_hook",
@@ -281,6 +284,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "araria-engine"
+version = "0.1.0"
+dependencies = [
+ "araria-core",
+ "araria-physics",
+ "araria-runtime",
+ "bevy",
+ "log",
+]
+
+[[package]]
 name = "araria-lua"
 version = "0.1.0"
 dependencies = [
@@ -293,6 +307,14 @@ version = "0.1.0"
 dependencies = [
  "araria-core",
  "rapier3d",
+]
+
+[[package]]
+name = "araria-runtime"
+version = "0.1.0"
+dependencies = [
+ "araria-core",
+ "araria-physics",
 ]
 
 [[package]]
@@ -2732,6 +2754,7 @@ dependencies = [
  "bytemuck",
  "ecolor",
  "emath",
+ "epaint_default_fonts",
  "font-types",
  "harfrust",
  "log",
@@ -2745,6 +2768,12 @@ dependencies = [
  "unicode-segmentation",
  "vello_cpu",
 ]
+
+[[package]]
+name = "epaint_default_fonts"
+version = "0.36.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "773fa9c96dd0dbef887e39d0ed6177f141cce4d68e6041df77570aa3702dfa13"
 
 [[package]]
 name = "equivalent"

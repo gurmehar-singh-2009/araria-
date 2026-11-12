@@ -6,6 +6,9 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+araria-core = { workspace = true }
+araria-runtime = { workspace = true }
+araria-engine = { workspace = true }
 bevy = { workspace = true }
 bevy_egui = { workspace = true }
 log = { workspace = true }

@@ -1,0 +1,13 @@
+[package]
+name = "araria-engine"
+description = "Araria's presentation layer: renders a runtime's data model with Bevy and feeds it input."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-core = { workspace = true }
+araria-physics = { workspace = true }
+araria-runtime = { workspace = true }
+bevy = { workspace = true }
+log = { workspace = true }

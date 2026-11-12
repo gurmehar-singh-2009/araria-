@@ -1,0 +1,10 @@
+[package]
+name = "araria-runtime"
+description = "Araria's headless game runtime: ties the data model, physics and players together."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-core = { workspace = true }
+araria-physics = { workspace = true }

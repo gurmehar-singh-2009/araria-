@@ -12,6 +12,8 @@ license = "MIT OR Apache-2.0"
 araria-lua = { path = "crates/lua" }
 araria-core = { path = "crates/core" }
 araria-physics = { path = "crates/physics" }
+araria-runtime = { path = "crates/runtime" }
+araria-engine = { path = "crates/engine" }
 
 bevy = { version = "0.20.1", default-features = false, features = [
     "3d",
@@ -23,6 +25,7 @@ bevy_egui = { version = "0.43.1", default-features = false, features = [
     "manage_clipboard",
     "open_url",
     "render",
+    "default_fonts",
 ] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

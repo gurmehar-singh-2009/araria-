@@ -1,7 +1,36 @@
 //! Araria application entry point (native + WebAssembly).
 
+mod demo;
+
+use std::sync::Arc;
+
+use araria_core::assets::AssetManifest;
+use araria_engine::input::UiCapture;
+use araria_engine::{EnginePlugin, Game};
 use bevy::prelude::*;
+use bevy::render::view::screenshot::{Screenshot, save_to_disk};
 use bevy_egui::{EguiContexts, EguiPlugin, EguiPrimaryContextPass, egui};
+
+/// Command-line options (native builds only).
+#[derive(Resource, Default)]
+struct Options {
+    /// Save a screenshot to this path after `screenshot_frame` frames, then exit.
+    screenshot: Option<String>,
+    screenshot_frame: u32,
+}
+
+fn parse_options() -> Options {
+    let mut options = Options { screenshot_frame: 90, ..default() };
+    let mut args = std::env::args().skip(1);
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "--screenshot" => options.screenshot = args.next(),
+            "--frames" => options.screenshot_frame = args.next().and_then(|v| v.parse().ok()).unwrap_or(90),
+            _ => {}
+        }
+    }
+    options
+}
 
 fn main() {
     #[cfg(target_arch = "wasm32")]
@@ -19,35 +48,44 @@ fn main() {
             ..default()
         }))
         .add_plugins(EguiPlugin::default())
-        .add_systems(Startup, setup)
-        .add_systems(EguiPrimaryContextPass, ui)
+        .add_plugins(EnginePlugin)
+        .insert_resource(parse_options())
+        .add_systems(Startup, start_demo)
+        .add_systems(Update, capture_screenshot)
+        .add_systems(EguiPrimaryContextPass, overlay)
         .run();
 }
 
-fn setup(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    commands.spawn((
-        Mesh3d(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
-        MeshMaterial3d(materials.add(Color::srgb(0.9, 0.4, 0.3))),
-        Transform::from_xyz(0.0, 0.5, 0.0),
-    ));
-    commands.spawn((
-        DirectionalLight { shadow_maps_enabled: true, ..default() },
-        Transform::from_xyz(4.0, 8.0, 4.0).looking_at(Vec3::ZERO, Vec3::Y),
-    ));
-    commands.spawn((
-        Camera3d::default(),
-        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-    ));
+fn start_demo(mut game: NonSendMut<Game>) {
+    let runtime = game.load(demo::scene(), Arc::new(AssetManifest::default()));
+    runtime.start();
 }
 
-fn ui(mut contexts: EguiContexts) -> Result {
+fn overlay(mut contexts: EguiContexts, game: NonSend<Game>, mut capture: ResMut<UiCapture>) -> Result {
     let ctx = contexts.ctx_mut()?;
-    egui::Window::new("Araria").show(ctx, |ui| {
-        ui.label("Toolchain check");
+    capture.pointer = ctx.is_pointer_over_egui() || ctx.egui_wants_pointer_input();
+    capture.keyboard = ctx.egui_wants_keyboard_input();
+    egui::Window::new("Araria").anchor(egui::Align2::LEFT_TOP, [12.0, 12.0]).resizable(false).show(ctx, |ui| {
+        ui.label("WASD move · Space jump · Shift run");
+        ui.label("Hold right mouse to look · wheel to zoom");
+        if let Some(runtime) = game.runtime.as_ref() {
+            let dm = runtime.dm.borrow();
+            ui.label(format!("{} instances · {} bodies", dm.len(), runtime.physics.borrow().body_count()));
+            if let Some(character) = runtime.local_character().and_then(|c| dm.get(c)) {
+                let p = character.vec3("Position");
+                ui.label(format!("{} at {:.1}, {:.1}, {:.1}", character.str("State"), p.x, p.y, p.z));
+            }
+        }
     });
     Ok(())
+}
+
+fn capture_screenshot(mut commands: Commands, options: Res<Options>, mut frame: Local<u32>, mut exit: MessageWriter<AppExit>) {
+    let Some(path) = options.screenshot.clone() else { return };
+    *frame += 1;
+    if *frame == options.screenshot_frame {
+        commands.spawn(Screenshot::primary_window()).observe(save_to_disk(path));
+    } else if *frame == options.screenshot_frame + 30 {
+        exit.write(AppExit::Success);
+    }
 }
