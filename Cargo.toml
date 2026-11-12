@@ -11,13 +11,6 @@ license = "MIT OR Apache-2.0"
 [workspace.dependencies]
 araria-lua = { path = "crates/lua" }
 araria-core = { path = "crates/core" }
-araria-script = { path = "crates/script" }
-araria-physics = { path = "crates/physics" }
-araria-storage = { path = "crates/storage" }
-araria-net = { path = "crates/net" }
-araria-engine = { path = "crates/engine" }
-araria-studio = { path = "crates/studio" }
-araria-platform = { path = "crates/platform" }
 
 bevy = { version = "0.20.1", default-features = false, features = [
     "3d",
