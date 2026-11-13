@@ -12,6 +12,7 @@
 //! 4. `Finish` – the journal is cleared
 
 pub mod camera;
+pub mod characters;
 pub mod environment;
 pub mod input;
 pub mod materials;
@@ -70,6 +71,7 @@ impl Plugin for EnginePlugin {
                 scene_sync::SceneSyncPlugin,
                 environment::EnvironmentPlugin,
                 camera::CameraPlugin,
+                characters::CharactersPlugin,
             ))
             .add_systems(Update, simulate.in_set(EngineSet::Simulate))
             .add_systems(Update, finish_frame.in_set(EngineSet::Finish));

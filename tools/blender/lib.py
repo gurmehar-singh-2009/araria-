@@ -207,7 +207,7 @@ def export(asset, objs, display_name, category, colliders=None, tags=(), animati
         export_yup=True,
         export_animations=bool(animations),
         export_skins=bool(animations),
-        export_animation_mode="ACTIONS" if animations else "ACTIONS",
+        export_animation_mode="NLA_TRACKS",
         export_force_sampling=True,
         export_materials="EXPORT",
     )

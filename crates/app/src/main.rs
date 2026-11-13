@@ -6,6 +6,7 @@ use std::sync::Arc;
 
 use araria_core::assets::AssetManifest;
 use araria_engine::input::UiCapture;
+use araria_engine::scene_sync::AssetLibrary;
 use araria_engine::{EnginePlugin, Game};
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{Screenshot, save_to_disk};
@@ -37,7 +38,7 @@ fn main() {
     console_error_panic_hook::set_once();
 
     App::new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
+        .add_plugins(DefaultPlugins.set(AssetPlugin { file_path: asset_root(), ..default() }).set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Araria".into(),
                 canvas: Some("#araria-canvas".into()),
@@ -56,8 +57,32 @@ fn main() {
         .run();
 }
 
-fn start_demo(mut game: NonSendMut<Game>) {
-    let runtime = game.load(demo::scene(), Arc::new(AssetManifest::default()));
+/// Where the asset library lives: next to the page on the web; on desktop
+/// `$ARARIA_ASSETS`, `./assets`, or `assets` beside the executable.
+fn asset_root() -> String {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        if let Ok(path) = std::env::var("ARARIA_ASSETS") {
+            return path;
+        }
+        if let Ok(cwd) = std::env::current_dir() {
+            let local = cwd.join("assets");
+            if local.join("manifest.json").exists() {
+                return local.to_string_lossy().into_owned();
+            }
+        }
+    }
+    "assets".to_string()
+}
+
+fn start_demo(mut game: NonSendMut<Game>, mut library: ResMut<AssetLibrary>) {
+    // The manifest is small, so it is compiled in rather than fetched.
+    let manifest = AssetManifest::parse(include_str!("../../../assets/manifest.json")).unwrap_or_else(|e| {
+        error!("built-in asset manifest is invalid: {e}");
+        AssetManifest::default()
+    });
+    library.0 = Arc::new(manifest);
+    let runtime = game.load(demo::scene(), library.0.clone());
     runtime.start();
 }
 

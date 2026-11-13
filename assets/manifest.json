@@ -260,6 +260,54 @@
     "survival"
    ]
   },
+  "models/character": {
+   "file": "models/character.glb",
+   "name": "Character",
+   "category": "Characters",
+   "size": [
+    0.8649,
+    2.0008,
+    0.4725
+   ],
+   "center": [
+    -0.0008,
+    0.9942,
+    -0.0084
+   ],
+   "colliders": [
+    {
+     "shape": "capsule",
+     "center": [
+      0,
+      0.9,
+      0
+     ],
+     "size": [
+      0.72,
+      1.8,
+      0.72
+     ]
+    }
+   ],
+   "animations": [
+    "Idle",
+    "Walk",
+    "Run",
+    "Jump",
+    "Fall",
+    "Land",
+    "Sit",
+    "Wave",
+    "Cheer",
+    "Dance",
+    "Point",
+    "Collapse"
+   ],
+   "triangles": 1968,
+   "tags": [
+    "character"
+   ]
+  },
   "models/checkpoint_flag": {
    "file": "models/checkpoint_flag.glb",
    "name": "Checkpoint Flag",

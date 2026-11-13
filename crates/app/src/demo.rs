@@ -55,5 +55,12 @@ pub fn scene() -> DataModel {
     dm.set(ball, "Shape", "Sphere").expect("valid");
     dm.set(ball, "Anchored", false).expect("valid");
     dm.set(ball, "Elasticity", 0.8).expect("valid");
+
+    for (asset, x, z) in [("models/tree_oak", -10.0, -10.0), ("models/tree_pine", 12.0, -12.0), ("models/tree_pine", 15.0, -9.0), ("models/house", -2.0, -16.0),
+        ("models/rock_large", 14.0, 3.0), ("models/bush", -6.0, 10.0), ("models/chest", 9.0, 0.5), ("models/lamp_post", 3.0, 9.0), ("models/campfire", -8.0, 4.0)] {
+        let mesh = dm.create("MeshPart", Some(dm.workspace())).expect("creatable");
+        dm.set(mesh, "Asset", asset).expect("valid");
+        dm.set(mesh, "Position", Vec3::new(x, 0.0, z)).expect("valid");
+    }
     dm
 }

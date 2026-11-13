@@ -4,11 +4,12 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
 use araria_core::assets::AssetManifest;
-use araria_core::geometry::{CHARACTER_HEIGHT, CHARACTER_RADIUS, effective_size};
+use araria_core::geometry::effective_size;
 use araria_core::{Change, DataModel, Instance, InstanceId};
 use bevy::light::NotShadowCaster;
 use bevy::prelude::*;
 
+use crate::characters::{CharacterAssets, CharacterModel};
 use crate::materials::{PartMaterials, ShapeMeshes};
 use crate::{EngineSet, Game, color};
 
@@ -95,6 +96,7 @@ struct Spawner<'a, 'w, 's> {
     materials: &'a mut Assets<StandardMaterial>,
     asset_server: &'a AssetServer,
     library: &'a AssetManifest,
+    character_scene: Handle<WorldAsset>,
 }
 
 impl Spawner<'_, '_, '_> {
@@ -133,27 +135,15 @@ impl Spawner<'_, '_, '_> {
         entity.id()
     }
 
-    /// Temporary stand-in until the rigged character model is loaded.
     fn character(&mut self, instance: &Instance, transform: Transform, link: InstanceLink) -> Entity {
-        let body = self.part_materials.get(self.materials, instance.color("ShirtColor"), "Plastic", 0.0);
-        let skin = self.part_materials.get(self.materials, instance.color("SkinColor"), "Plastic", 0.0);
-        let (meshes, radius, height) = (self.meshes, CHARACTER_RADIUS, CHARACTER_HEIGHT);
-        self.commands
-            .spawn((transform, Visibility::Inherited, link))
-            .with_children(|parent| {
-                parent.spawn((
-                    Mesh3d(meshes.capsule.clone()),
-                    MeshMaterial3d(body),
-                    Transform::from_xyz(0.0, height * 0.5, 0.0).with_scale(Vec3::new(radius * 2.0, height * 0.5, radius * 2.0)),
-                ));
-                // A face plate so the facing direction (+Z) is visible.
-                parent.spawn((
-                    Mesh3d(meshes.block.clone()),
-                    MeshMaterial3d(skin),
-                    Transform::from_xyz(0.0, height * 0.8, radius * 0.75).with_scale(Vec3::new(0.4, 0.3, 0.3)),
-                ));
-            })
-            .id()
+        let model = CharacterModel {
+            instance: instance.id,
+            skin: instance.color("SkinColor"),
+            shirt: instance.color("ShirtColor"),
+            pants: instance.color("PantsColor"),
+            hair: instance.color("HairColor"),
+        };
+        self.commands.spawn((WorldAssetRoot(self.character_scene.clone()), model, transform, Visibility::Inherited, link)).id()
     }
 
     fn light(&mut self, instance: &Instance, transform: Transform, link: InstanceLink) -> Entity {
@@ -189,6 +179,7 @@ fn sync_scene(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
     library: Res<AssetLibrary>,
+    characters: Res<CharacterAssets>,
     mut transforms: Query<&mut Transform, With<InstanceLink>>,
 ) {
     let rebuild_all = map.generation != game.generation;
@@ -207,6 +198,7 @@ fn sync_scene(
         materials: &mut materials,
         asset_server: &asset_server,
         library: &library.0,
+        character_scene: characters.scene.clone(),
     };
 
     if rebuild_all {
