@@ -13,6 +13,8 @@ araria-lua = { path = "crates/lua" }
 araria-core = { path = "crates/core" }
 araria-physics = { path = "crates/physics" }
 araria-runtime = { path = "crates/runtime" }
+araria-storage = { path = "crates/storage" }
+araria-platform = { path = "crates/platform" }
 araria-engine = { path = "crates/engine" }
 
 bevy = { version = "0.20.1", default-features = false, features = [

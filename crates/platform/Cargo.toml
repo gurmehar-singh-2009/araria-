@@ -1,0 +1,19 @@
+[package]
+name = "araria-platform"
+description = "Araria's platform shell: design system, local library, settings and the Home / Discover / Store / Create / Library / Settings screens."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-core = { workspace = true }
+araria-storage = { workspace = true }
+egui = { version = "0.36", default-features = false }
+image = { version = "0.25", default-features = false, features = ["png"] }
+include_dir = "0.7"
+serde = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+js-sys = "0.3"

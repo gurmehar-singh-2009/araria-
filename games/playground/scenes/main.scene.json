@@ -1,0 +1,441 @@
+{
+  "format": "araria.scene",
+  "nodes": [
+    {
+      "children": [
+        {
+          "class": "Camera"
+        },
+        {
+          "class": "Part",
+          "name": "Ground",
+          "props": {
+            "Color": "#5fae57",
+            "Material": "Grass",
+            "Position": [
+              0,
+              -0.5,
+              0
+            ],
+            "Size": [
+              120,
+              1,
+              120
+            ]
+          }
+        },
+        {
+          "class": "SpawnPoint",
+          "props": {
+            "Color": "#4cc9f0",
+            "Position": [
+              0,
+              0.1,
+              6
+            ],
+            "Size": [
+              3,
+              0.2,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step0",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              -6,
+              0.3,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step1",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              -3.6,
+              0.9,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step2",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              -1.2,
+              1.5,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step3",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              1.2,
+              2.1,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step4",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              3.6,
+              2.7,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Step5",
+          "props": {
+            "Color": "#f4a261",
+            "Position": [
+              6,
+              3.3,
+              -4
+            ],
+            "Size": [
+              2.2,
+              0.4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Tower",
+          "props": {
+            "Color": "#e76f51",
+            "Position": [
+              9,
+              2,
+              -4
+            ],
+            "Size": [
+              3,
+              4,
+              3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Ramp",
+          "props": {
+            "Color": "#8ecae6",
+            "Position": [
+              -12,
+              1,
+              0
+            ],
+            "Shape": "Wedge",
+            "Size": [
+              4,
+              2,
+              8
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Pillar",
+          "props": {
+            "Color": "#adb5bd",
+            "Material": "Metal",
+            "Position": [
+              6,
+              2,
+              6
+            ],
+            "Shape": "Cylinder",
+            "Size": [
+              1.6,
+              4,
+              1.6
+            ]
+          }
+        },
+        {
+          "children": [
+            {
+              "class": "Light",
+              "props": {
+                "Color": "#ffd166",
+                "Range": 18
+              }
+            }
+          ],
+          "class": "Part",
+          "name": "Glow",
+          "props": {
+            "Color": "#ffd166",
+            "Material": "Neon",
+            "Position": [
+              6,
+              4.6,
+              6
+            ],
+            "Shape": "Sphere",
+            "Size": [
+              1.2,
+              1.2,
+              1.2
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Glass",
+          "props": {
+            "Color": "#bde0fe",
+            "Material": "Glass",
+            "Position": [
+              -3,
+              1.5,
+              8
+            ],
+            "Size": [
+              4,
+              3,
+              0.3
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Crate0",
+          "props": {
+            "Anchored": false,
+            "Color": "#ef476f",
+            "Material": "Wood",
+            "Position": [
+              3,
+              0.5,
+              2
+            ],
+            "Size": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Crate1",
+          "props": {
+            "Anchored": false,
+            "Color": "#06d6a0",
+            "Material": "Wood",
+            "Position": [
+              3,
+              1.55,
+              2
+            ],
+            "Size": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Crate2",
+          "props": {
+            "Anchored": false,
+            "Color": "#118ab2",
+            "Material": "Wood",
+            "Position": [
+              3,
+              2.6,
+              2
+            ],
+            "Size": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "class": "Part",
+          "name": "Ball",
+          "props": {
+            "Anchored": false,
+            "Color": "#ffffff",
+            "Elasticity": 0.8,
+            "Position": [
+              -2,
+              3,
+              2
+            ],
+            "Shape": "Sphere",
+            "Size": [
+              1.4,
+              1.4,
+              1.4
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/tree_oak",
+            "Position": [
+              -10,
+              0,
+              -10
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/tree_pine",
+            "Position": [
+              12,
+              0,
+              -12
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/tree_pine",
+            "Position": [
+              15,
+              0,
+              -9
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/house",
+            "Position": [
+              -2,
+              0,
+              -16
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/rock_large",
+            "Position": [
+              14,
+              0,
+              3
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/bush",
+            "Position": [
+              -6,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/chest",
+            "Position": [
+              9,
+              0,
+              0.5
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/lamp_post",
+            "Position": [
+              3,
+              0,
+              9
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "props": {
+            "Asset": "models/campfire",
+            "Position": [
+              -8,
+              0,
+              4
+            ]
+          }
+        }
+      ],
+      "class": "Workspace"
+    },
+    {
+      "class": "Lighting"
+    },
+    {
+      "class": "Players"
+    },
+    {
+      "class": "Storage"
+    },
+    {
+      "class": "Scripts"
+    },
+    {
+      "class": "Gui"
+    }
+  ],
+  "version": 1
+}

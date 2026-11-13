@@ -26,6 +26,14 @@ fn parse_options() -> Options {
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--screenshot" => options.screenshot = args.next(),
+            "--dump-demo" => {
+                // Writes the demo scene as a scene file (used to seed `games/playground`).
+                if let Some(path) = args.next() {
+                    let text = araria_core::scene::save_scene_string(&demo::scene());
+                    std::fs::write(&path, text).unwrap_or_else(|e| eprintln!("cannot write {path}: {e}"));
+                }
+                std::process::exit(0);
+            }
             "--frames" => options.screenshot_frame = args.next().and_then(|v| v.parse().ok()).unwrap_or(90),
             _ => {}
         }

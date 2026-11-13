@@ -1,0 +1,18 @@
+{
+  "format": "araria.project",
+  "version": 1,
+  "id": "playground",
+  "name": "Playground",
+  "description": "A sunny test yard with stairs, ramps, loose crates and a bouncy ball. Run around, push things over and get a feel for how Araria moves.",
+  "author": "Araria",
+  "category": "Sandbox",
+  "tags": ["starter", "physics"],
+  "scene": "scenes/main.scene.json",
+  "max_players": 8,
+  "created": 1763000000,
+  "modified": 1763000000,
+  "engine": "0.1.0",
+  "dependencies": [{ "name": "araria.core", "version": "1" }],
+  "featured": 10,
+  "controls": ["WASD — move", "Space — jump", "Shift — run", "Right mouse — look around"]
+}
