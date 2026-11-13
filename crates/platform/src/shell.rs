@@ -114,6 +114,8 @@ pub struct PlatformUi {
     pub(crate) rebinding: Option<usize>,
     pub(crate) import_path: String,
     toasts: Vec<Toast>,
+    /// Contents of dropped files waiting to be imported.
+    imports: std::rc::Rc<std::cell::RefCell<Vec<Result<Vec<u8>, String>>>>,
     page_since: f64,
     themed: bool,
 }
@@ -134,6 +136,7 @@ impl Default for PlatformUi {
             rebinding: None,
             import_path: String::new(),
             toasts: Vec::new(),
+            imports: Default::default(),
             page_since: 0.0,
             themed: false,
         }
@@ -306,7 +309,7 @@ impl PlatformUi {
             ui.painter().rect(note, CornerRadius::same(12), SURFACE, Stroke::new(1.0, BORDER), StrokeKind::Inside);
             let (icon, color, title, body) = match library.storage().warning() {
                 Some(_) => (icons::WARNING, theme::WARNING, "Not saving", "Storage is unavailable"),
-                None => (icons::LOCK_OPEN, theme::SUCCESS, "No account needed", "Everything stays on this device"),
+                None => (icons::LOCK_OPEN, theme::SUCCESS, "No account needed", "Your data stays on this device"),
             };
             ui.painter().text(note.left_center() + vec2(22.0, 0.0), Align2::CENTER_CENTER, icon, theme::regular(20.0), color);
             ui.painter().text(note.left_top() + vec2(42.0, 13.0), Align2::LEFT_TOP, title, theme::semibold(12.5), TEXT);
@@ -350,9 +353,19 @@ impl PlatformUi {
     fn import_dropped_files(&mut self, ui: &Ui, library: &mut Library) {
         let dropped = ui.ctx().input(|i| i.raw.dropped_files.clone());
         for file in dropped {
-            // Synchronous reads work on desktop; in the browser the bytes are
-            // available once the drop has been processed.
-            let text = file.bytes().ok().and_then(|bytes| String::from_utf8(bytes).ok());
+            let queue = self.imports.clone();
+            #[cfg(not(target_arch = "wasm32"))]
+            queue.borrow_mut().push(file.bytes());
+            // Browsers only expose dropped files asynchronously.
+            #[cfg(target_arch = "wasm32")]
+            wasm_bindgen_futures::spawn_local(async move {
+                let bytes = file.bytes_async().await;
+                queue.borrow_mut().push(bytes);
+            });
+        }
+        let ready: Vec<Result<Vec<u8>, String>> = self.imports.borrow_mut().drain(..).collect();
+        for bytes in ready {
+            let text = bytes.ok().and_then(|bytes| String::from_utf8(bytes).ok());
             match text.ok_or_else(|| "the file could not be read".to_string()).and_then(|t| library.import_bundle(&t)) {
                 Ok(key) => {
                     let name = library.find(&key).map_or_else(|| key.id.clone(), |e| e.manifest.name.clone());

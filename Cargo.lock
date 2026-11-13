@@ -326,6 +326,7 @@ dependencies = [
  "log",
  "serde",
  "serde_json",
+ "wasm-bindgen-futures",
 ]
 
 [[package]]
