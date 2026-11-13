@@ -12,6 +12,7 @@ license = "MIT OR Apache-2.0"
 araria-lua = { path = "crates/lua" }
 araria-core = { path = "crates/core" }
 araria-physics = { path = "crates/physics" }
+araria-script = { path = "crates/script" }
 araria-runtime = { path = "crates/runtime" }
 araria-storage = { path = "crates/storage" }
 araria-platform = { path = "crates/platform" }

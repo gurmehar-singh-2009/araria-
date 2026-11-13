@@ -17,6 +17,6 @@ pub mod schema;
 pub mod types;
 
 pub use datamodel::{Change, DataModel, Event, Instance, ModelError, ModelResult};
-pub use glam::{EulerRot, Quat, Vec2, Vec3};
+pub use glam::{EulerRot, Mat3, Quat, Vec2, Vec3};
 pub use schema::{AssetKind, ClassId, ClassInfo, MemberDoc, PropDef, PropType, schema};
 pub use types::{Color, InstanceId, UDim2, Variant, euler_deg_to_quat, quat_to_euler_deg};

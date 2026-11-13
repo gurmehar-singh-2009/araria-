@@ -1,0 +1,12 @@
+[package]
+name = "araria-script"
+description = "Araria's scripting layer: the Lua API over the data model, the task scheduler, events, tweens and hot reloading."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-lua = { workspace = true }
+araria-core = { workspace = true }
+araria-physics = { workspace = true }
+serde_json = { workspace = true }

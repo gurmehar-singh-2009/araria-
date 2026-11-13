@@ -338,6 +338,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "araria-script"
+version = "0.1.0"
+dependencies = [
+ "araria-core",
+ "araria-lua",
+ "araria-physics",
+ "serde_json",
+]
+
+[[package]]
 name = "araria-storage"
 version = "0.1.0"
 dependencies = [
