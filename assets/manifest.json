@@ -1,0 +1,1353 @@
+{
+ "version": 1,
+ "models": {
+  "models/axe": {
+   "file": "models/axe.glb",
+   "name": "Axe",
+   "category": "Tools",
+   "size": [
+    0.3046,
+    0.9762,
+    0.08
+   ],
+   "center": [
+    0.1177,
+    0.4881,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 128,
+   "tags": [
+    "tool",
+    "survival"
+   ]
+  },
+  "models/barrel": {
+   "file": "models/barrel.glb",
+   "name": "Barrel",
+   "category": "Props",
+   "size": [
+    0.9164,
+    1.0,
+    0.94
+   ],
+   "center": [
+    0.0,
+    0.5,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.5,
+      0
+     ],
+     "size": [
+      0.9,
+      1.0,
+      0.9
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 260,
+   "tags": [
+    "container"
+   ]
+  },
+  "models/bench": {
+   "file": "models/bench.glb",
+   "name": "Bench",
+   "category": "Props",
+   "size": [
+    1.6,
+    1.1,
+    0.53
+   ],
+   "center": [
+    0.0,
+    0.55,
+    -0.015
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.3,
+      0
+     ],
+     "size": [
+      1.6,
+      0.6,
+      0.5
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 240,
+   "tags": [
+    "seat"
+   ]
+  },
+  "models/bounce_pad": {
+   "file": "models/bounce_pad.glb",
+   "name": "Bounce Pad",
+   "category": "Gameplay",
+   "size": [
+    2.0,
+    0.595,
+    2.0
+   ],
+   "center": [
+    0.0,
+    0.2975,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.17,
+      0
+     ],
+     "size": [
+      2.0,
+      0.34,
+      2.0
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 320,
+   "tags": [
+    "launcher"
+   ]
+  },
+  "models/bridge": {
+   "file": "models/bridge.glb",
+   "name": "Wooden Bridge",
+   "category": "Structures",
+   "size": [
+    1.94,
+    0.97,
+    4.42
+   ],
+   "center": [
+    0.0,
+    0.605,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.2,
+      0
+     ],
+     "size": [
+      1.9,
+      0.4,
+      4.4
+     ]
+    },
+    {
+     "shape": "box",
+     "center": [
+      -0.9,
+      0.7,
+      0
+     ],
+     "size": [
+      0.14,
+      0.8,
+      4.4
+     ]
+    },
+    {
+     "shape": "box",
+     "center": [
+      0.9,
+      0.7,
+      0
+     ],
+     "size": [
+      0.14,
+      0.8,
+      4.4
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 2160,
+   "tags": [
+    "path"
+   ]
+  },
+  "models/bush": {
+   "file": "models/bush.glb",
+   "name": "Berry Bush",
+   "category": "Nature",
+   "size": [
+    1.8301,
+    1.0446,
+    1.241
+   ],
+   "center": [
+    0.0375,
+    0.4605,
+    0.0553
+   ],
+   "colliders": [
+    {
+     "shape": "sphere",
+     "center": [
+      0,
+      0.4,
+      0
+     ],
+     "size": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 300,
+   "tags": [
+    "plant"
+   ]
+  },
+  "models/campfire": {
+   "file": "models/campfire.glb",
+   "name": "Campfire",
+   "category": "Props",
+   "size": [
+    1.3932,
+    0.9588,
+    1.3924
+   ],
+   "center": [
+    -0.015,
+    0.4406,
+    0.0091
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.15,
+      0
+     ],
+     "size": [
+      1.3,
+      0.3,
+      1.3
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 288,
+   "tags": [
+    "light",
+    "survival"
+   ]
+  },
+  "models/checkpoint_flag": {
+   "file": "models/checkpoint_flag.glb",
+   "name": "Checkpoint Flag",
+   "category": "Gameplay",
+   "size": [
+    1.65,
+    2.61,
+    1.0
+   ],
+   "center": [
+    0.325,
+    1.305,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      1.2,
+      0
+     ],
+     "size": [
+      0.3,
+      2.4,
+      0.3
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 196,
+   "tags": [
+    "checkpoint"
+   ]
+  },
+  "models/chest": {
+   "file": "models/chest.glb",
+   "name": "Treasure Chest",
+   "category": "Props",
+   "size": [
+    1.2,
+    0.96,
+    0.87
+   ],
+   "center": [
+    0.0,
+    0.47,
+    0.015
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.45,
+      0
+     ],
+     "size": [
+      1.2,
+      0.9,
+      0.8
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 584,
+   "tags": [
+    "container",
+    "treasure"
+   ]
+  },
+  "models/cloud": {
+   "file": "models/cloud.glb",
+   "name": "Cloud",
+   "category": "Nature",
+   "size": [
+    6.4839,
+    2.195,
+    2.8
+   ],
+   "center": [
+    0.0238,
+    0.1175,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 480,
+   "tags": [
+    "sky",
+    "decor"
+   ]
+  },
+  "models/coin": {
+   "file": "models/coin.glb",
+   "name": "Coin",
+   "category": "Pickups",
+   "size": [
+    0.8,
+    0.8,
+    0.13
+   ],
+   "center": [
+    0.0,
+    0.5,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 312,
+   "tags": [
+    "pickup"
+   ]
+  },
+  "models/crate": {
+   "file": "models/crate.glb",
+   "name": "Crate",
+   "category": "Props",
+   "size": [
+    1.02,
+    1.02,
+    1.02
+   ],
+   "center": [
+    0.0,
+    0.5,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.5,
+      0
+     ],
+     "size": [
+      1,
+      1,
+      1
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 1308,
+   "tags": [
+    "container"
+   ]
+  },
+  "models/crystal": {
+   "file": "models/crystal.glb",
+   "name": "Crystal Cluster",
+   "category": "Resources",
+   "size": [
+    1.5777,
+    1.7869,
+    1.0589
+   ],
+   "center": [
+    0.0003,
+    0.8065,
+    0.0454
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.6,
+      0
+     ],
+     "size": [
+      0.9,
+      1.2,
+      0.9
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 180,
+   "tags": [
+    "resource",
+    "light"
+   ]
+  },
+  "models/fence": {
+   "file": "models/fence.glb",
+   "name": "Fence",
+   "category": "Structures",
+   "size": [
+    2.04,
+    1.1,
+    0.14
+   ],
+   "center": [
+    0.0,
+    0.55,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.55,
+      0
+     ],
+     "size": [
+      2.0,
+      1.1,
+      0.2
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 432,
+   "tags": [
+    "barrier"
+   ]
+  },
+  "models/finish_arch": {
+   "file": "models/finish_arch.glb",
+   "name": "Finish Arch",
+   "category": "Gameplay",
+   "size": [
+    10.4755,
+    5.0,
+    0.5
+   ],
+   "center": [
+    0.0,
+    2.5,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      -5,
+      2.5,
+      0
+     ],
+     "size": [
+      0.5,
+      5,
+      0.5
+     ]
+    },
+    {
+     "shape": "cylinder",
+     "center": [
+      5,
+      2.5,
+      0
+     ],
+     "size": [
+      0.5,
+      5,
+      0.5
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 552,
+   "tags": [
+    "racing"
+   ]
+  },
+  "models/flower": {
+   "file": "models/flower.glb",
+   "name": "Flower",
+   "category": "Nature",
+   "size": [
+    0.4105,
+    0.54,
+    0.361
+   ],
+   "center": [
+    0.0048,
+    0.27,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 164,
+   "tags": [
+    "plant",
+    "decor"
+   ]
+  },
+  "models/gem": {
+   "file": "models/gem.glb",
+   "name": "Gem",
+   "category": "Pickups",
+   "size": [
+    0.5196,
+    0.75,
+    0.6
+   ],
+   "center": [
+    0.0,
+    0.375,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 30,
+   "tags": [
+    "pickup"
+   ]
+  },
+  "models/grass_tuft": {
+   "file": "models/grass_tuft.glb",
+   "name": "Grass Tuft",
+   "category": "Nature",
+   "size": [
+    0.3175,
+    0.4801,
+    0.4881
+   ],
+   "center": [
+    0.0937,
+    0.2298,
+    0.0306
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 108,
+   "tags": [
+    "plant",
+    "decor"
+   ]
+  },
+  "models/heart": {
+   "file": "models/heart.glb",
+   "name": "Heart",
+   "category": "Pickups",
+   "size": [
+    0.7965,
+    0.76,
+    0.418
+   ],
+   "center": [
+    -0.0,
+    0.48,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 182,
+   "tags": [
+    "pickup"
+   ]
+  },
+  "models/house": {
+   "file": "models/house.glb",
+   "name": "Cottage",
+   "category": "Structures",
+   "size": [
+    4.8,
+    4.6,
+    3.7
+   ],
+   "center": [
+    0.0,
+    2.3,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      1.35,
+      0
+     ],
+     "size": [
+      4.4,
+      2.7,
+      3.6
+     ]
+    },
+    {
+     "shape": "box",
+     "center": [
+      0,
+      3.3,
+      0
+     ],
+     "size": [
+      2.6,
+      1.3,
+      3.7
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 1068,
+   "tags": [
+    "building"
+   ]
+  },
+  "models/kart": {
+   "file": "models/kart.glb",
+   "name": "Kart",
+   "category": "Vehicles",
+   "size": [
+    1.88,
+    1.1915,
+    2.5393
+   ],
+   "center": [
+    0.0,
+    0.6043,
+    0.0097
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.5,
+      0
+     ],
+     "size": [
+      1.7,
+      0.9,
+      2.5
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 1660,
+   "tags": [
+    "vehicle",
+    "racing"
+   ]
+  },
+  "models/key": {
+   "file": "models/key.glb",
+   "name": "Key",
+   "category": "Pickups",
+   "size": [
+    0.42,
+    0.85,
+    0.1
+   ],
+   "center": [
+    0.0,
+    0.535,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 356,
+   "tags": [
+    "pickup"
+   ]
+  },
+  "models/lamp_post": {
+   "file": "models/lamp_post.glb",
+   "name": "Lamp Post",
+   "category": "Props",
+   "size": [
+    0.52,
+    3.8,
+    0.52
+   ],
+   "center": [
+    0.0,
+    1.9,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      1.6,
+      0
+     ],
+     "size": [
+      0.3,
+      3.2,
+      0.3
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 148,
+   "tags": [
+    "light"
+   ]
+  },
+  "models/log": {
+   "file": "models/log.glb",
+   "name": "Log",
+   "category": "Nature",
+   "size": [
+    2.02,
+    0.6087,
+    0.64
+   ],
+   "center": [
+    0.0,
+    0.32,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.32,
+      0
+     ],
+     "size": [
+      2.0,
+      0.64,
+      0.6
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 108,
+   "tags": [
+    "wood",
+    "resource"
+   ]
+  },
+  "models/mushroom": {
+   "file": "models/mushroom.glb",
+   "name": "Mushroom",
+   "category": "Nature",
+   "size": [
+    0.5706,
+    0.5225,
+    0.6
+   ],
+   "center": [
+    0.0,
+    0.2612,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 188,
+   "tags": [
+    "plant",
+    "pickup"
+   ]
+  },
+  "models/ore_rock": {
+   "file": "models/ore_rock.glb",
+   "name": "Ore Rock",
+   "category": "Resources",
+   "size": [
+    1.6576,
+    1.1281,
+    1.5222
+   ],
+   "center": [
+    0.0267,
+    0.6015,
+    0.0337
+   ],
+   "colliders": [
+    {
+     "shape": "sphere",
+     "center": [
+      0,
+      0.5,
+      0
+     ],
+     "size": [
+      1.3,
+      1.3,
+      1.3
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 180,
+   "tags": [
+    "resource",
+    "survival"
+   ]
+  },
+  "models/rock_large": {
+   "file": "models/rock_large.glb",
+   "name": "Large Rock",
+   "category": "Nature",
+   "size": [
+    2.8799,
+    1.6467,
+    2.2589
+   ],
+   "center": [
+    0.1159,
+    0.7794,
+    0.0933
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.8234,
+      0
+     ],
+     "size": [
+      2.3039,
+      1.482,
+      1.8071
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 80,
+   "tags": [
+    "rock"
+   ]
+  },
+  "models/rock_small": {
+   "file": "models/rock_small.glb",
+   "name": "Small Rock",
+   "category": "Nature",
+   "size": [
+    1.1438,
+    0.4923,
+    0.8541
+   ],
+   "center": [
+    -0.0582,
+    0.2304,
+    0.0281
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.2461,
+      0
+     ],
+     "size": [
+      0.915,
+      0.443,
+      0.6833
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 80,
+   "tags": [
+    "rock"
+   ]
+  },
+  "models/rock_tall": {
+   "file": "models/rock_tall.glb",
+   "name": "Tall Rock",
+   "category": "Nature",
+   "size": [
+    1.1684,
+    2.1498,
+    1.153
+   ],
+   "center": [
+    -0.0772,
+    1.0069,
+    0.0015
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      1.0749,
+      0
+     ],
+     "size": [
+      0.9347,
+      1.9348,
+      0.9224
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 80,
+   "tags": [
+    "rock"
+   ]
+  },
+  "models/sign": {
+   "file": "models/sign.glb",
+   "name": "Signpost",
+   "category": "Props",
+   "size": [
+    1.1,
+    1.55,
+    0.18
+   ],
+   "center": [
+    0.0,
+    0.775,
+    0.03
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.75,
+      0
+     ],
+     "size": [
+      0.2,
+      1.5,
+      0.2
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 216,
+   "tags": [
+    "decor"
+   ]
+  },
+  "models/spawn_pad": {
+   "file": "models/spawn_pad.glb",
+   "name": "Spawn Pad",
+   "category": "Gameplay",
+   "size": [
+    3.0,
+    0.2,
+    3.0
+   ],
+   "center": [
+    0.0,
+    0.1,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.08,
+      0
+     ],
+     "size": [
+      3.0,
+      0.16,
+      3.0
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 560,
+   "tags": [
+    "spawn"
+   ]
+  },
+  "models/spikes": {
+   "file": "models/spikes.glb",
+   "name": "Spike Trap",
+   "category": "Gameplay",
+   "size": [
+    2.0,
+    0.91,
+    2.0
+   ],
+   "center": [
+    0.0,
+    0.455,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.4,
+      0
+     ],
+     "size": [
+      1.9,
+      0.8,
+      1.9
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 288,
+   "tags": [
+    "hazard"
+   ]
+  },
+  "models/star": {
+   "file": "models/star.glb",
+   "name": "Star",
+   "category": "Pickups",
+   "size": [
+    0.8101,
+    0.7705,
+    0.16
+   ],
+   "center": [
+    0.0,
+    0.537,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 116,
+   "tags": [
+    "pickup"
+   ]
+  },
+  "models/stump": {
+   "file": "models/stump.glb",
+   "name": "Tree Stump",
+   "category": "Nature",
+   "size": [
+    0.9511,
+    0.52,
+    1.0
+   ],
+   "center": [
+    0.0,
+    0.26,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.25,
+      0
+     ],
+     "size": [
+      0.9,
+      0.5,
+      0.9
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 72,
+   "tags": [
+    "wood"
+   ]
+  },
+  "models/tent": {
+   "file": "models/tent.glb",
+   "name": "Tent",
+   "category": "Structures",
+   "size": [
+    2.8,
+    1.9,
+    2.66
+   ],
+   "center": [
+    0.0,
+    0.95,
+    0.03
+   ],
+   "colliders": [
+    {
+     "shape": "box",
+     "center": [
+      0,
+      0.6,
+      0
+     ],
+     "size": [
+      2.2,
+      1.2,
+      2.6
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 36,
+   "tags": [
+    "survival",
+    "building"
+   ]
+  },
+  "models/torch": {
+   "file": "models/torch.glb",
+   "name": "Torch",
+   "category": "Props",
+   "size": [
+    0.18,
+    1.2,
+    0.18
+   ],
+   "center": [
+    0.0,
+    0.6,
+    -0.0
+   ],
+   "colliders": [],
+   "animations": [],
+   "triangles": 72,
+   "tags": [
+    "light"
+   ]
+  },
+  "models/tower": {
+   "file": "models/tower.glb",
+   "name": "Stone Tower",
+   "category": "Structures",
+   "size": [
+    3.2107,
+    6.0,
+    3.2107
+   ],
+   "center": [
+    0.0,
+    3.0,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      3.0,
+      0
+     ],
+     "size": [
+      3.0,
+      6.0,
+      3.0
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 292,
+   "tags": [
+    "building"
+   ]
+  },
+  "models/traffic_cone": {
+   "file": "models/traffic_cone.glb",
+   "name": "Traffic Cone",
+   "category": "Gameplay",
+   "size": [
+    0.8,
+    0.96,
+    0.8
+   ],
+   "center": [
+    0.0,
+    0.48,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.45,
+      0
+     ],
+     "size": [
+      0.6,
+      0.9,
+      0.6
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 100,
+   "tags": [
+    "racing"
+   ]
+  },
+  "models/tree_oak": {
+   "file": "models/tree_oak.glb",
+   "name": "Oak Tree",
+   "category": "Nature",
+   "size": [
+    3.3621,
+    4.3783,
+    3.0516
+   ],
+   "center": [
+    0.0452,
+    2.1891,
+    -0.0483
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      1.3,
+      0
+     ],
+     "size": [
+      0.7,
+      2.6,
+      0.7
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 528,
+   "tags": [
+    "tree"
+   ]
+  },
+  "models/tree_pine": {
+   "file": "models/tree_pine.glb",
+   "name": "Pine Tree",
+   "category": "Nature",
+   "size": [
+    2.462,
+    4.3,
+    2.4246
+   ],
+   "center": [
+    0.0,
+    2.15,
+    -0.0377
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      1.2,
+      0
+     ],
+     "size": [
+      0.6,
+      2.4,
+      0.6
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 156,
+   "tags": [
+    "tree"
+   ]
+  },
+  "models/well": {
+   "file": "models/well.glb",
+   "name": "Well",
+   "category": "Structures",
+   "size": [
+    2.3,
+    2.8,
+    1.9
+   ],
+   "center": [
+    0.0,
+    1.4,
+    -0.0
+   ],
+   "colliders": [
+    {
+     "shape": "cylinder",
+     "center": [
+      0,
+      0.4,
+      0
+     ],
+     "size": [
+      1.9,
+      0.8,
+      1.9
+     ]
+    }
+   ],
+   "animations": [],
+   "triangles": 332,
+   "tags": [
+    "decor",
+    "water"
+   ]
+  }
+ },
+ "audio": {},
+ "textures": {}
+}
