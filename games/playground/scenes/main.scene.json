@@ -11,6 +11,7 @@
           "name": "Ground",
           "props": {
             "Color": "#5fae57",
+            "Locked": true,
             "Material": "Grass",
             "Position": [
               0,
@@ -18,9 +19,9 @@
               0
             ],
             "Size": [
-              120,
+              140,
               1,
-              120
+              140
             ]
           }
         },
@@ -30,132 +31,150 @@
             "Color": "#4cc9f0",
             "Position": [
               0,
-              0.1,
+              0.12,
               6
             ],
-            "Size": [
-              3,
-              0.2,
-              3
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Step0",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              -6,
-              0.3,
-              -4
+            "Rotation": [
+              0,
+              -180,
+              0
             ],
             "Size": [
-              2.2,
-              0.4,
-              3
+              3.4,
+              0.25,
+              3.4
             ]
           }
         },
         {
-          "class": "Part",
-          "name": "Step1",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              -3.6,
-              0.9,
-              -4
-            ],
-            "Size": [
-              2.2,
-              0.4,
-              3
-            ]
-          }
+          "children": [
+            {
+              "class": "Part",
+              "name": "Step0",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  -6,
+                  0.3,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Step1",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  -3.6,
+                  0.9,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Step2",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  -1.2,
+                  1.5,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Step3",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  1.2,
+                  2.1,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Step4",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  3.6,
+                  2.7,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Step5",
+              "props": {
+                "Color": "#f4a261",
+                "Material": "Wood",
+                "Position": [
+                  6,
+                  3.3,
+                  -4
+                ],
+                "Size": [
+                  2.2,
+                  0.4,
+                  3
+                ]
+              }
+            }
+          ],
+          "class": "Folder",
+          "name": "Stairs"
         },
         {
           "class": "Part",
-          "name": "Step2",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              -1.2,
-              1.5,
-              -4
-            ],
-            "Size": [
-              2.2,
-              0.4,
-              3
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Step3",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              1.2,
-              2.1,
-              -4
-            ],
-            "Size": [
-              2.2,
-              0.4,
-              3
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Step4",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              3.6,
-              2.7,
-              -4
-            ],
-            "Size": [
-              2.2,
-              0.4,
-              3
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Step5",
-          "props": {
-            "Color": "#f4a261",
-            "Position": [
-              6,
-              3.3,
-              -4
-            ],
-            "Size": [
-              2.2,
-              0.4,
-              3
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Tower",
+          "name": "Lookout",
           "props": {
             "Color": "#e76f51",
+            "Material": "Wood",
             "Position": [
-              9,
-              2,
+              9.6,
+              3.5,
               -4
             ],
             "Size": [
-              3,
               4,
-              3
+              0.4,
+              4
             ]
           }
         },
@@ -201,6 +220,7 @@
             {
               "class": "Light",
               "props": {
+                "Brightness": 2,
                 "Color": "#ffd166",
                 "Range": 18
               }
@@ -243,172 +263,390 @@
           }
         },
         {
-          "class": "Part",
-          "name": "Crate0",
-          "props": {
-            "Anchored": false,
-            "Color": "#ef476f",
-            "Material": "Wood",
-            "Position": [
-              3,
-              0.5,
-              2
-            ],
-            "Size": [
-              1,
-              1,
-              1
-            ]
-          }
+          "children": [
+            {
+              "class": "MeshPart",
+              "name": "Crate",
+              "props": {
+                "Anchored": false,
+                "Asset": "models/crate",
+                "Position": [
+                  3,
+                  0,
+                  2
+                ],
+                "Tint": "#ef476f"
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "Crate",
+              "props": {
+                "Anchored": false,
+                "Asset": "models/crate",
+                "Position": [
+                  3,
+                  1.05,
+                  2
+                ],
+                "Tint": "#06d6a0"
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "Crate",
+              "props": {
+                "Anchored": false,
+                "Asset": "models/crate",
+                "Position": [
+                  3,
+                  2.1,
+                  2
+                ],
+                "Tint": "#118ab2"
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "barrel",
+              "props": {
+                "Anchored": false,
+                "Asset": "models/barrel",
+                "Position": [
+                  5,
+                  0,
+                  1
+                ]
+              }
+            },
+            {
+              "class": "Part",
+              "name": "Ball",
+              "props": {
+                "Anchored": false,
+                "Color": "#ffffff",
+                "Elasticity": 0.85,
+                "Position": [
+                  -2,
+                  3,
+                  2
+                ],
+                "Shape": "Sphere",
+                "Size": [
+                  1.4,
+                  1.4,
+                  1.4
+                ]
+              }
+            }
+          ],
+          "class": "Folder",
+          "name": "Loose"
         },
         {
-          "class": "Part",
-          "name": "Crate1",
-          "props": {
-            "Anchored": false,
-            "Color": "#06d6a0",
-            "Material": "Wood",
-            "Position": [
-              3,
-              1.55,
-              2
-            ],
-            "Size": [
-              1,
-              1,
-              1
-            ]
-          }
+          "children": [
+            {
+              "class": "MeshPart",
+              "name": "tree_oak",
+              "props": {
+                "Asset": "models/tree_oak",
+                "Position": [
+                  -10,
+                  0,
+                  -10
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "tree_pine",
+              "props": {
+                "Asset": "models/tree_pine",
+                "Position": [
+                  12,
+                  0,
+                  -12
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "tree_pine",
+              "props": {
+                "Asset": "models/tree_pine",
+                "Position": [
+                  15,
+                  0,
+                  -9
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "tree_oak",
+              "props": {
+                "Asset": "models/tree_oak",
+                "Position": [
+                  -18,
+                  0,
+                  6
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "house",
+              "props": {
+                "Asset": "models/house",
+                "Position": [
+                  -2,
+                  0,
+                  -17
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "rock_large",
+              "props": {
+                "Asset": "models/rock_large",
+                "Position": [
+                  14,
+                  0,
+                  3
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "bush",
+              "props": {
+                "Asset": "models/bush",
+                "Position": [
+                  -6,
+                  0,
+                  10
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "bush",
+              "props": {
+                "Asset": "models/bush",
+                "Position": [
+                  11,
+                  0,
+                  9
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "lamp_post",
+              "props": {
+                "Asset": "models/lamp_post",
+                "Position": [
+                  3,
+                  0,
+                  9
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "bench",
+              "props": {
+                "Asset": "models/bench",
+                "Position": [
+                  -7,
+                  0,
+                  -7.5
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "fence",
+              "props": {
+                "Asset": "models/fence",
+                "Position": [
+                  -14,
+                  0,
+                  -6
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "fence",
+              "props": {
+                "Asset": "models/fence",
+                "Position": [
+                  -16.04,
+                  0,
+                  -6
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "flower",
+              "props": {
+                "Asset": "models/flower",
+                "Position": [
+                  1,
+                  0,
+                  10
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "flower",
+              "props": {
+                "Asset": "models/flower",
+                "Position": [
+                  2,
+                  0,
+                  11.4
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "flower",
+              "props": {
+                "Asset": "models/flower",
+                "Position": [
+                  -1.5,
+                  0,
+                  11
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "mushroom",
+              "props": {
+                "Asset": "models/mushroom",
+                "Position": [
+                  -9,
+                  0,
+                  9
+                ]
+              }
+            },
+            {
+              "class": "MeshPart",
+              "name": "well",
+              "props": {
+                "Asset": "models/well",
+                "Position": [
+                  17,
+                  0,
+                  -2
+                ]
+              }
+            },
+            {
+              "children": [
+                {
+                  "class": "BillboardLabel",
+                  "props": {
+                    "Position": [
+                      0,
+                      2.1,
+                      0
+                    ],
+                    "Text": "Welcome to the Playground",
+                    "TextSize": 16
+                  }
+                }
+              ],
+              "class": "MeshPart",
+              "name": "sign",
+              "props": {
+                "Asset": "models/sign",
+                "Position": [
+                  2.6,
+                  0,
+                  3.4
+                ]
+              }
+            }
+          ],
+          "class": "Folder",
+          "name": "Scenery"
         },
         {
-          "class": "Part",
-          "name": "Crate2",
-          "props": {
-            "Anchored": false,
-            "Color": "#118ab2",
-            "Material": "Wood",
-            "Position": [
-              3,
-              2.6,
-              2
-            ],
-            "Size": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        {
-          "class": "Part",
-          "name": "Ball",
-          "props": {
-            "Anchored": false,
-            "Color": "#ffffff",
-            "Elasticity": 0.8,
-            "Position": [
-              -2,
-              3,
-              2
-            ],
-            "Shape": "Sphere",
-            "Size": [
-              1.4,
-              1.4,
-              1.4
-            ]
-          }
-        },
-        {
+          "children": [
+            {
+              "class": "ParticleEmitter",
+              "name": "Flames",
+              "props": {
+                "ColorEnd": "#e63946",
+                "Lifetime": 0.9,
+                "Position": [
+                  0,
+                  0.45,
+                  0
+                ],
+                "Rate": 26,
+                "Size": 0.5,
+                "SizeEnd": 0.05,
+                "Speed": 1.6,
+                "Spread": 16
+              }
+            },
+            {
+              "class": "ParticleEmitter",
+              "name": "Smoke",
+              "props": {
+                "Color": "#8d99ae",
+                "ColorEnd": "#495057",
+                "Glow": false,
+                "Lifetime": 2.6,
+                "Opacity": 0.35,
+                "Position": [
+                  0,
+                  1.1,
+                  0
+                ],
+                "Rate": 5,
+                "Size": 0.4,
+                "SizeEnd": 1.3,
+                "Speed": 0.9,
+                "Spread": 12
+              }
+            },
+            {
+              "class": "Light",
+              "props": {
+                "Brightness": 1.6,
+                "Color": "#ff9f1c",
+                "Position": [
+                  0,
+                  0.8,
+                  0
+                ],
+                "Range": 10
+              }
+            },
+            {
+              "class": "Sound",
+              "props": {
+                "Asset": "audio/fire",
+                "Looped": true,
+                "Playing": true,
+                "Range": 16,
+                "Spatial": true,
+                "Volume": 0.7
+              }
+            }
+          ],
           "class": "MeshPart",
-          "props": {
-            "Asset": "models/tree_oak",
-            "Position": [
-              -10,
-              0,
-              -10
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/tree_pine",
-            "Position": [
-              12,
-              0,
-              -12
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/tree_pine",
-            "Position": [
-              15,
-              0,
-              -9
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/house",
-            "Position": [
-              -2,
-              0,
-              -16
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/rock_large",
-            "Position": [
-              14,
-              0,
-              3
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/bush",
-            "Position": [
-              -6,
-              0,
-              10
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/chest",
-            "Position": [
-              9,
-              0,
-              0.5
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
-          "props": {
-            "Asset": "models/lamp_post",
-            "Position": [
-              3,
-              0,
-              9
-            ]
-          }
-        },
-        {
-          "class": "MeshPart",
+          "name": "campfire",
           "props": {
             "Asset": "models/campfire",
             "Position": [
@@ -417,12 +655,251 @@
               4
             ]
           }
+        },
+        {
+          "children": [
+            {
+              "class": "Prompt",
+              "props": {
+                "ActionText": "Open",
+                "ObjectText": "Treasure chest",
+                "Position": [
+                  0,
+                  0.8,
+                  0
+                ]
+              }
+            }
+          ],
+          "class": "MeshPart",
+          "name": "Chest",
+          "props": {
+            "Asset": "models/chest",
+            "Position": [
+              9.6,
+              3.7,
+              -4
+            ]
+          }
+        },
+        {
+          "class": "MeshPart",
+          "name": "BouncePad",
+          "props": {
+            "Asset": "models/bounce_pad",
+            "Position": [
+              -14,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "children": [
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -6,
+                  1.4,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -3.6,
+                  2,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -1.2,
+                  2.6,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  1.2,
+                  3.2,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  3.6,
+                  3.8,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  6,
+                  4.4,
+                  -4
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -12,
+                  3.2,
+                  0
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  0,
+                  1.2,
+                  -9
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  12,
+                  1.2,
+                  6
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -14,
+                  6,
+                  10
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  6,
+                  1.2,
+                  12
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            },
+            {
+              "class": "MeshPart",
+              "name": "Coin",
+              "props": {
+                "Asset": "models/coin",
+                "Collision": "None",
+                "Position": [
+                  -3,
+                  1.2,
+                  14
+                ]
+              },
+              "tags": [
+                "coin"
+              ]
+            }
+          ],
+          "class": "Folder",
+          "name": "Coins"
         }
       ],
       "class": "Workspace"
     },
     {
-      "class": "Lighting"
+      "class": "Lighting",
+      "props": {
+        "ClockTime": 14.5
+      }
     },
     {
       "class": "Players"
@@ -431,6 +908,15 @@
       "class": "Storage"
     },
     {
+      "children": [
+        {
+          "class": "Script",
+          "name": "main",
+          "props": {
+            "Source": "scripts/main.lua"
+          }
+        }
+      ],
       "class": "Scripts"
     },
     {

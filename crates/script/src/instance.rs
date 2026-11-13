@@ -430,6 +430,10 @@ pub fn register(host: &Rc<Host>) {
         host.state.borrow_mut().commands.push(Command::CameraShake { intensity, duration });
         Ok(Ret::None)
     });
+    method!("WorldToScreen", |host, _lua, args| {
+        let (screen, visible) = host.input.borrow().world_to_screen(vec3_arg(args, 1, "WorldToScreen")?);
+        Ok(Ret::Values(vec![Lua::userdata(crate::types::Vector2(screen)), Value::Bool(visible)]))
+    });
     method!("Play", |host, _lua, args| {
         let id = self_id(args, "Play")?;
         let mut dm = host.dm.borrow_mut();

@@ -27,6 +27,8 @@ static BUILTIN: Dir<'static> = include_dir!("$CARGO_MANIFEST_DIR/../../games");
 const INSTALLED: &str = "installed";
 const PROJECTS: &str = "projects";
 const STATS_FILE: &str = "library.json";
+/// Records which build of a catalog game an installed copy came from.
+const BUILD_FILE: &str = ".build";
 const MAX_RECENT: usize = 12;
 
 /// Where a library entry comes from.
@@ -128,6 +130,17 @@ fn builtin_files(dir: &'static Dir<'static>) -> Vec<(String, &'static [u8])> {
         stack.extend(current.dirs());
     }
     files
+}
+
+/// A fingerprint of an embedded game's files; it changes when the game is
+/// updated in a new version of Araria.
+fn builtin_build(dir: &'static Dir<'static>) -> String {
+    let mut files = builtin_files(dir);
+    files.sort();
+    let hash = files.iter().fold(0xcbf2_9ce4_8422_2325u64, |h, (path, bytes)| {
+        path.bytes().chain(bytes.iter().copied()).fold(h, |h, b| (h ^ u64::from(b)).wrapping_mul(0x0000_0100_0000_01b3))
+    });
+    format!("{hash:016x}")
 }
 
 fn builtin_dir(id: &str) -> Option<&'static Dir<'static>> {
@@ -249,11 +262,20 @@ impl Library {
     pub fn install(&mut self, id: &str) -> Result<(), String> {
         let dir = builtin_dir(id).ok_or_else(|| format!("'{id}' is not in the catalog"))?;
         let root = GameKey::catalog(id).root();
+        // Start clean so files removed from the game do not linger.
+        self.storage.remove_all(&root);
         for (path, bytes) in builtin_files(dir) {
             self.storage.write(&format!("{root}/{path}"), bytes)?;
         }
+        self.storage.write(&format!("{root}/{BUILD_FILE}"), builtin_build(dir).as_bytes())?;
         self.refresh();
         Ok(())
+    }
+
+    /// Whether the installed copy of a catalog game matches this build.
+    fn is_current(&self, id: &str) -> bool {
+        let Some(dir) = builtin_dir(id) else { return true };
+        self.storage.read_string(&format!("{}/{BUILD_FILE}", GameKey::catalog(id).root())).is_some_and(|build| build == builtin_build(dir))
     }
 
     pub fn uninstall(&mut self, id: &str) {
@@ -287,7 +309,7 @@ impl Library {
             Some(template) => {
                 let dir = builtin_dir(template).ok_or_else(|| format!("unknown template '{template}'"))?;
                 for (path, bytes) in builtin_files(dir) {
-                    if path != MANIFEST_FILE {
+                    if path != MANIFEST_FILE && path != BUILD_FILE {
                         self.storage.write(&format!("{root}/{path}"), bytes)?;
                     }
                 }
@@ -377,7 +399,7 @@ impl Library {
     /// Loads a game's scene for playing or editing. Catalog games are
     /// installed first if needed.
     pub fn load(&mut self, key: &GameKey) -> Result<LoadedGame, String> {
-        if key.origin == Origin::Catalog && !self.find(key).is_some_and(|e| e.installed) {
+        if key.origin == Origin::Catalog && (!self.find(key).is_some_and(|e| e.installed) || !self.is_current(&key.id)) {
             self.install(&key.id)?;
         }
         let root = key.root();

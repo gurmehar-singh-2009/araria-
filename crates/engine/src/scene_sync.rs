@@ -24,7 +24,7 @@ pub struct AssetLibrary(pub Arc<AssetManifest>);
 #[derive(Resource, Default)]
 pub struct EntityMap {
     map: HashMap<InstanceId, Entity>,
-    generation: u64,
+    scene: (u64, u64),
 }
 
 impl EntityMap {
@@ -182,12 +182,12 @@ fn sync_scene(
     characters: Res<CharacterAssets>,
     mut transforms: Query<&mut Transform, With<InstanceLink>>,
 ) {
-    let rebuild_all = map.generation != game.generation;
+    let rebuild_all = map.scene != game.scene_id();
     if rebuild_all {
         for (_, entity) in map.map.drain() {
             commands.entity(entity).despawn();
         }
-        map.generation = game.generation;
+        map.scene = game.scene_id();
     }
     let Some(runtime) = game.runtime.as_ref() else { return };
     let dm = runtime.dm.borrow();

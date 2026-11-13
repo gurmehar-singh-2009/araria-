@@ -141,7 +141,7 @@ impl ScriptRuntime {
         }
     }
 
-    pub fn set_save_backend(&mut self, backend: Box<dyn SaveBackend>) {
+    pub fn set_save_backend(&mut self, backend: Rc<dyn SaveBackend>) {
         *self.host.save.borrow_mut() = Some(backend);
     }
 
@@ -529,6 +529,15 @@ impl ScriptRuntime {
             parts.push(self.describe(value));
         }
         Ok(parts.join(", "))
+    }
+
+    /// Runs a whole chunk outside any script (tools, scene builders) with a
+    /// generous execution budget.
+    pub fn run(&mut self, source: &str, name: &str) -> Result<(), String> {
+        let chunk = self.lua.load(source, name, Some(self.console_env.clone())).map_err(|e| e.message())?;
+        self.host.state.borrow_mut().current_script = 0;
+        self.lua.set_budget(host::RESUME_BUDGET * 50);
+        self.lua.call(&chunk, &[]).map(|_| ()).map_err(|e| e.report())
     }
 
     /// A readable one-line description of a value (tables are expanded one level).

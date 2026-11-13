@@ -1,20 +1,24 @@
 //! Ties the platform interface to the engine: launching games, the in-game
 //! menu, and applying settings.
 
+use std::collections::{BTreeMap, HashMap};
+use std::rc::Rc;
 use std::sync::Arc;
 
 use araria_core::assets::AssetManifest;
-use araria_engine::Game;
+use araria_engine::{Game, PresentationCommands};
 use araria_engine::camera::{CameraRig, RenderSettings};
 use araria_engine::input::{KeyBindings, UiCapture};
 use araria_engine::scene_sync::AssetLibrary;
 use araria_platform::widgets::{self, ButtonKind};
 use araria_platform::{Action, GameKey, Library, Page, PlatformUi, Settings, ToastKind, icons, theme};
+use araria_runtime::{LogLevel, ProjectFiles, SaveBackend};
 use araria_storage::Storage;
 use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
 
 use crate::Options;
+use crate::hud::{Hud, HudFrame};
 
 /// What is on screen.
 enum Screen {
@@ -31,6 +35,9 @@ pub struct Session {
     screen: Screen,
     menu_open: bool,
     started: bool,
+    hud: Hud,
+    /// Textures loaded for `ImageLabel` elements, by asset id.
+    textures: HashMap<String, (Handle<Image>, egui::TextureId)>,
 }
 
 pub fn setup(world: &mut World) {
@@ -49,6 +56,8 @@ pub fn setup(world: &mut World) {
         screen: Screen::Platform,
         menu_open: false,
         started: false,
+        hud: Hud::default(),
+        textures: HashMap::new(),
     });
 }
 
@@ -67,6 +76,46 @@ fn apply_settings(settings: &Settings, render: &mut RenderSettings, bindings: &m
     rig.sensitivity = 0.22 * i.mouse_sensitivity;
 }
 
+/// Script sources come straight from the game's folder in local storage, so
+/// edits (from the built-in editor or, on desktop, any other tool) are
+/// picked up by hot reload.
+pub fn project_files(storage: &Storage, key: &GameKey) -> ProjectFiles {
+    let root = key.root();
+    let (read_storage, read_root) = (storage.clone(), root.clone());
+    let print_storage = storage.clone();
+    ProjectFiles::new(move |path| read_storage.read_string(&format!("{read_root}/{path}")), move |path| print_storage.fingerprint(&format!("{root}/{path}")))
+}
+
+/// Game progress (`Save:Get` / `Save:Set`), one small JSON file per game.
+struct GameSaves {
+    storage: Storage,
+    path: String,
+}
+
+impl GameSaves {
+    fn load(&self) -> BTreeMap<String, String> {
+        self.storage.read_string(&self.path).and_then(|text| serde_json::from_str(&text).ok()).unwrap_or_default()
+    }
+}
+
+impl SaveBackend for GameSaves {
+    fn get(&self, key: &str) -> Option<String> {
+        self.load().remove(key)
+    }
+
+    fn set(&self, key: &str, value: Option<&str>) {
+        let mut values = self.load();
+        match value {
+            Some(value) => values.insert(key.to_string(), value.to_string()),
+            None => values.remove(key),
+        };
+        let text = serde_json::to_string(&values).expect("a string map is always serializable");
+        if let Err(e) = self.storage.write(&self.path, text.as_bytes()) {
+            warn!("could not save game progress: {e}");
+        }
+    }
+}
+
 impl Session {
     /// Loads a game into the engine and switches to it.
     fn launch(&mut self, key: &GameKey, editing: bool, game: &mut Game, assets: &AssetLibrary, rig: &mut CameraRig) {
@@ -75,7 +124,8 @@ impl Session {
                 for warning in &loaded.warnings {
                     warn!("{}: {warning}", loaded.manifest.name);
                 }
-                let runtime = game.load(loaded.model, assets.0.clone());
+                let runtime = game.load(loaded.model, assets.0.clone(), project_files(self.library.storage(), key));
+                runtime.set_save_backend(Rc::new(GameSaves { storage: self.library.storage().clone(), path: format!("saves/{}-{}.json", if key.origin == araria_platform::Origin::Catalog { "game" } else { "project" }, key.id) }));
                 if editing {
                     self.library.record_project_opened(&key.id);
                 } else {
@@ -89,6 +139,7 @@ impl Session {
                 }
                 self.screen = Screen::InGame { key: key.clone(), name: loaded.manifest.name, editing };
                 self.menu_open = false;
+                self.hud.clear();
             }
             Err(e) => self.ui.toast(ToastKind::Error, format!("Could not start the game: {e}")),
         }
@@ -96,6 +147,7 @@ impl Session {
 
     fn leave(&mut self, game: &mut Game) {
         game.unload();
+        self.hud.clear();
         self.library.refresh();
         self.screen = Screen::Platform;
         self.menu_open = false;
@@ -130,6 +182,8 @@ pub fn interface(
     mut bindings: ResMut<KeyBindings>,
     mut rig: ResMut<CameraRig>,
     time: Res<Time>,
+    presentation: Res<PresentationCommands>,
+    asset_server: Res<AssetServer>,
     mut exit: MessageWriter<AppExit>,
 ) -> Result {
     let ctx = contexts.ctx_mut()?.clone();
@@ -180,13 +234,38 @@ pub fn interface(
             }
             let mut leave = false;
             let mut restart = false;
+            let mut over_interface = false;
+            if let Some(runtime) = game.runtime.as_mut() {
+                // Script output has no console outside the studio; keep it in the log.
+                for entry in runtime.scripts.take_log() {
+                    match entry.level {
+                        LogLevel::Error => error!("[{}] {}", entry.source.as_deref().unwrap_or("script"), entry.text),
+                        LogLevel::Warn => warn!("[{}] {}", entry.source.as_deref().unwrap_or("script"), entry.text),
+                        LogLevel::Info => info!("[{}] {}", entry.source.as_deref().unwrap_or("script"), entry.text),
+                    }
+                }
+                let textures = &mut session.textures;
+                let library = assets.0.clone();
+                let mut texture = |asset: &str| -> Option<egui::TextureId> {
+                    if let Some((_, id)) = textures.get(asset) {
+                        return Some(*id);
+                    }
+                    let file = library.textures.get(asset)?.file.clone();
+                    let handle: Handle<Image> = asset_server.load(file);
+                    let id = contexts.add_image(bevy_egui::EguiTextureHandle::Strong(handle.clone()));
+                    textures.insert(asset.to_string(), (handle, id));
+                    Some(id)
+                };
+                let mut frame = HudFrame { runtime, commands: &presentation.0, area: root.max_rect(), dt: time.delta_secs(), interactive: !session.menu_open, texture: &mut texture };
+                over_interface = session.hud.draw(&root, &mut frame);
+            }
             if !options.hide_ui {
                 hud(&root, &name, editing, session.settings.performance.show_fps, time.delta_secs(), &mut session.menu_open);
             }
             if session.menu_open {
                 (leave, restart) = pause_menu(&ctx, &name, editing, &mut session.menu_open);
             }
-            capture.pointer = session.menu_open || ctx.is_pointer_over_egui() || ctx.egui_wants_pointer_input();
+            capture.pointer = session.menu_open || over_interface || ctx.is_pointer_over_egui() || ctx.egui_wants_pointer_input();
             capture.keyboard = session.menu_open || ctx.egui_wants_keyboard_input();
             if restart {
                 session.launch(&key, editing, &mut game, &assets, &mut rig);

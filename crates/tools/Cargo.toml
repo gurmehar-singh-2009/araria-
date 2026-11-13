@@ -1,0 +1,14 @@
+[package]
+name = "araria-tools"
+description = "Developer tools for Araria: bakes built-in game scenes from Lua builder scripts and checks game scripts."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "araria-bake"
+path = "src/bake.rs"
+
+[dependencies]
+araria-core = { workspace = true }
+araria-runtime = { workspace = true }

@@ -273,6 +273,7 @@ dependencies = [
  "console_error_panic_hook",
  "js-sys",
  "log",
+ "serde_json",
  "wasm-bindgen",
  "web-sys",
 ]
@@ -335,6 +336,7 @@ version = "0.1.0"
 dependencies = [
  "araria-core",
  "araria-physics",
+ "araria-script",
 ]
 
 [[package]]
@@ -355,6 +357,14 @@ dependencies = [
  "log",
  "wasm-bindgen",
  "web-sys",
+]
+
+[[package]]
+name = "araria-tools"
+version = "0.1.0"
+dependencies = [
+ "araria-core",
+ "araria-runtime",
 ]
 
 [[package]]

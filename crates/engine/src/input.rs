@@ -156,4 +156,5 @@ fn gather_input(
             }
         }
     }
+    input.view_projection = camera.single().ok().map(|(camera, transform)| camera.clip_from_view() * transform.to_matrix().inverse());
 }

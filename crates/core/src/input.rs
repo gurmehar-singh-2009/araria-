@@ -3,7 +3,7 @@
 
 use std::collections::HashSet;
 
-use glam::{Vec2, Vec3};
+use glam::{Mat4, Vec2, Vec3};
 
 #[derive(Clone, Debug, Default)]
 pub struct InputState {
@@ -26,11 +26,25 @@ pub struct InputState {
     pub camera_yaw: f32,
     /// True while the pointer or keyboard is being used by the interface.
     pub ui_captured: bool,
+    /// The camera's combined view and projection matrix, when known.
+    pub view_projection: Option<Mat4>,
 }
 
 impl InputState {
     pub fn key(&self, name: &str) -> bool {
         self.keys.contains(name)
+    }
+
+    /// Projects a world position to viewport pixels. The second value is
+    /// false when the point is behind the camera (or no camera exists yet).
+    pub fn world_to_screen(&self, world: Vec3) -> (Vec2, bool) {
+        let Some(matrix) = self.view_projection else { return (Vec2::ZERO, false) };
+        let clip = matrix * world.extend(1.0);
+        if clip.w <= 1e-4 {
+            return (Vec2::ZERO, false);
+        }
+        let ndc = clip.truncate() / clip.w;
+        (Vec2::new((ndc.x + 1.0) * 0.5 * self.viewport.x, (1.0 - ndc.y) * 0.5 * self.viewport.y), true)
     }
 
     /// The movement request as a world-space direction relative to the camera.

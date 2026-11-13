@@ -1,6 +1,7 @@
 //! Araria application entry point (native + WebAssembly).
 
 mod demo;
+mod hud;
 mod session;
 
 use bevy::prelude::*;

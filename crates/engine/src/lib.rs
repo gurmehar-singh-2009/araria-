@@ -11,18 +11,20 @@
 //! 3. `Present` – journal → entities, environment, camera
 //! 4. `Finish` – the journal is cleared
 
+pub mod audio;
 pub mod camera;
 pub mod characters;
 pub mod environment;
 pub mod input;
 pub mod materials;
+pub mod particles;
 pub mod scene_sync;
 
 use std::sync::Arc;
 
 use araria_core::DataModel;
 use araria_core::assets::AssetManifest;
-use araria_runtime::Runtime;
+use araria_runtime::{Command, ProjectFiles, Runtime};
 use bevy::prelude::*;
 
 /// The game currently loaded, if any. Non-send because the runtime shares
@@ -37,9 +39,15 @@ pub struct Game {
 
 impl Game {
     /// Replaces the current game with a new scene in edit mode.
-    pub fn load(&mut self, dm: DataModel, assets: Arc<AssetManifest>) -> &mut Runtime {
+    pub fn load(&mut self, dm: DataModel, assets: Arc<AssetManifest>, files: ProjectFiles) -> &mut Runtime {
         self.generation += 1;
-        self.runtime.insert(Runtime::new(dm, assets))
+        self.runtime.insert(Runtime::with_files(dm, assets, files))
+    }
+
+    /// Identifies the scene presentation layers should be showing: it
+    /// changes when another game is loaded or the scene is replaced.
+    pub fn scene_id(&self) -> (u64, u64) {
+        (self.generation, self.runtime.as_ref().map_or(0, Runtime::epoch))
     }
 
     pub fn unload(&mut self) {
@@ -47,6 +55,12 @@ impl Game {
         self.generation += 1;
     }
 }
+
+/// Requests scripts made during this frame's simulation (sounds, particle
+/// bursts, notifications, camera shake). Presentation systems read it; it
+/// is replaced every frame.
+#[derive(Resource, Default)]
+pub struct PresentationCommands(pub Vec<Command>);
 
 #[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum EngineSet {
@@ -61,6 +75,7 @@ pub struct EnginePlugin;
 impl Plugin for EnginePlugin {
     fn build(&self, app: &mut App) {
         app.insert_non_send(Game::default())
+            .init_resource::<PresentationCommands>()
             .configure_sets(
                 Update,
                 (EngineSet::Input, EngineSet::Simulate, EngineSet::Present, EngineSet::Finish).chain(),
@@ -72,16 +87,20 @@ impl Plugin for EnginePlugin {
                 environment::EnvironmentPlugin,
                 camera::CameraPlugin,
                 characters::CharactersPlugin,
+                audio::AudioPlugin,
+                particles::ParticlesPlugin,
             ))
             .add_systems(Update, simulate.in_set(EngineSet::Simulate))
             .add_systems(Update, finish_frame.in_set(EngineSet::Finish));
     }
 }
 
-fn simulate(mut game: NonSendMut<Game>, time: Res<Time>) {
+fn simulate(mut game: NonSendMut<Game>, time: Res<Time>, mut commands: ResMut<PresentationCommands>) {
+    commands.0.clear();
     if let Some(runtime) = game.runtime.as_mut() {
         // Long hitches (tab switches, asset loads) are not simulated in full.
         runtime.step(time.delta_secs().min(0.1));
+        commands.0 = runtime.take_commands();
     }
 }
 

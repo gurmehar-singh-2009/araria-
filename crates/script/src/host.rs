@@ -106,7 +106,7 @@ pub struct Host {
     pub physics: Rc<RefCell<Physics>>,
     pub input: Rc<RefCell<InputState>>,
     pub state: RefCell<HostState>,
-    pub save: RefCell<Option<Box<dyn SaveBackend>>>,
+    pub save: RefCell<Option<Rc<dyn SaveBackend>>>,
     /// Method tables, filled in once the globals are registered.
     pub methods: RefCell<HashMap<&'static str, Value>>,
     pub signal_methods: RefCell<Option<TableRef>>,

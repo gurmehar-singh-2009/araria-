@@ -21,6 +21,7 @@ araria-engine = { path = "crates/engine" }
 bevy = { version = "0.20.1", default-features = false, features = [
     "3d",
     "audio",
+    "vorbis",
     "wav",
     "jpeg",
 ] }
