@@ -1396,6 +1396,238 @@
    ]
   }
  },
- "audio": {},
+ "audio": {
+  "audio/beep": {
+   "file": "audio/beep.ogg",
+   "name": "Countdown Beep",
+   "category": "Game",
+   "duration": 0.18,
+   "looping": false
+  },
+  "audio/bounce": {
+   "file": "audio/bounce.ogg",
+   "name": "Bounce",
+   "category": "Movement",
+   "duration": 0.3,
+   "looping": false
+  },
+  "audio/checkpoint": {
+   "file": "audio/checkpoint.ogg",
+   "name": "Checkpoint",
+   "category": "Game",
+   "duration": 1.0,
+   "looping": false
+  },
+  "audio/chop": {
+   "file": "audio/chop.ogg",
+   "name": "Chop",
+   "category": "World",
+   "duration": 0.12,
+   "looping": false
+  },
+  "audio/click": {
+   "file": "audio/click.ogg",
+   "name": "Click",
+   "category": "Interface",
+   "duration": 0.04,
+   "looping": false
+  },
+  "audio/coin": {
+   "file": "audio/coin.ogg",
+   "name": "Coin",
+   "category": "Pickups",
+   "duration": 0.4,
+   "looping": false
+  },
+  "audio/death": {
+   "file": "audio/death.ogg",
+   "name": "Defeated",
+   "category": "Game",
+   "duration": 0.7,
+   "looping": false
+  },
+  "audio/door": {
+   "file": "audio/door.ogg",
+   "name": "Door",
+   "category": "World",
+   "duration": 0.5,
+   "looping": false
+  },
+  "audio/engine": {
+   "file": "audio/engine.ogg",
+   "name": "Engine Loop",
+   "category": "Vehicles",
+   "duration": 1.0,
+   "looping": true
+  },
+  "audio/error": {
+   "file": "audio/error.ogg",
+   "name": "Error",
+   "category": "Interface",
+   "duration": 0.35,
+   "looping": false
+  },
+  "audio/explosion": {
+   "file": "audio/explosion.ogg",
+   "name": "Explosion",
+   "category": "Game",
+   "duration": 0.9,
+   "looping": false
+  },
+  "audio/fire": {
+   "file": "audio/fire.ogg",
+   "name": "Fire Loop",
+   "category": "World",
+   "duration": 1.8,
+   "looping": true
+  },
+  "audio/footstep": {
+   "file": "audio/footstep.ogg",
+   "name": "Footstep",
+   "category": "Movement",
+   "duration": 0.07,
+   "looping": false
+  },
+  "audio/gem": {
+   "file": "audio/gem.ogg",
+   "name": "Gem",
+   "category": "Pickups",
+   "duration": 0.7,
+   "looping": false
+  },
+  "audio/go": {
+   "file": "audio/go.ogg",
+   "name": "Go",
+   "category": "Game",
+   "duration": 0.5,
+   "looping": false
+  },
+  "audio/hit": {
+   "file": "audio/hit.ogg",
+   "name": "Hit",
+   "category": "Game",
+   "duration": 0.1,
+   "looping": false
+  },
+  "audio/hover": {
+   "file": "audio/hover.ogg",
+   "name": "Hover",
+   "category": "Interface",
+   "duration": 0.02,
+   "looping": false
+  },
+  "audio/hurt": {
+   "file": "audio/hurt.ogg",
+   "name": "Hurt",
+   "category": "Game",
+   "duration": 0.22,
+   "looping": false
+  },
+  "audio/jump": {
+   "file": "audio/jump.ogg",
+   "name": "Jump",
+   "category": "Movement",
+   "duration": 0.16,
+   "looping": false
+  },
+  "audio/land": {
+   "file": "audio/land.ogg",
+   "name": "Land",
+   "category": "Movement",
+   "duration": 0.14,
+   "looping": false
+  },
+  "audio/laser": {
+   "file": "audio/laser.ogg",
+   "name": "Zap",
+   "category": "Game",
+   "duration": 0.18,
+   "looping": false
+  },
+  "audio/lose": {
+   "file": "audio/lose.ogg",
+   "name": "Defeat",
+   "category": "Game",
+   "duration": 1.5,
+   "looping": false
+  },
+  "audio/mine": {
+   "file": "audio/mine.ogg",
+   "name": "Mine",
+   "category": "World",
+   "duration": 0.25,
+   "looping": false
+  },
+  "audio/music_dash": {
+   "file": "audio/music_dash.ogg",
+   "name": "Neon Dash",
+   "category": "Music",
+   "duration": 13.91,
+   "looping": true
+  },
+  "audio/music_depths": {
+   "file": "audio/music_depths.ogg",
+   "name": "Quiet Depths",
+   "category": "Music",
+   "duration": 25.26,
+   "looping": true
+  },
+  "audio/music_meadow": {
+   "file": "audio/music_meadow.ogg",
+   "name": "Sunny Meadow",
+   "category": "Music",
+   "duration": 18.46,
+   "looping": true
+  },
+  "audio/notify": {
+   "file": "audio/notify.ogg",
+   "name": "Notify",
+   "category": "Interface",
+   "duration": 0.45,
+   "looping": false
+  },
+  "audio/pickup": {
+   "file": "audio/pickup.ogg",
+   "name": "Pickup",
+   "category": "Pickups",
+   "duration": 0.12,
+   "looping": false
+  },
+  "audio/powerup": {
+   "file": "audio/powerup.ogg",
+   "name": "Power Up",
+   "category": "Pickups",
+   "duration": 0.75,
+   "looping": false
+  },
+  "audio/splash": {
+   "file": "audio/splash.ogg",
+   "name": "Splash",
+   "category": "World",
+   "duration": 0.5,
+   "looping": false
+  },
+  "audio/whoosh": {
+   "file": "audio/whoosh.ogg",
+   "name": "Whoosh",
+   "category": "World",
+   "duration": 0.35,
+   "looping": false
+  },
+  "audio/win": {
+   "file": "audio/win.ogg",
+   "name": "Victory",
+   "category": "Game",
+   "duration": 1.9,
+   "looping": false
+  },
+  "audio/wind": {
+   "file": "audio/wind.ogg",
+   "name": "Wind Loop",
+   "category": "World",
+   "duration": 3.5,
+   "looping": true
+  }
+ },
  "textures": {}
 }
