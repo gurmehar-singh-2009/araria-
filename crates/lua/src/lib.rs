@@ -44,6 +44,6 @@ pub use gc::GcStats;
 pub use stdlib::{arg_error, func_arg, int_arg, num_arg, opt_int, opt_num, str_arg, table_arg};
 pub use value::{
     ArithOp, Closure, LuaStr, Native, NativeFn, Ret, Table, TableRef, ThreadRef, ThreadStatus, UserData, Value,
-    float_to_int_exact, fmt_number,
+    f32_to_value, float_to_int_exact, fmt_number,
 };
 pub use vm::{Lua, Resumed, ThreadState};

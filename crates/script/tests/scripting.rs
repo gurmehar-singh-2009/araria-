@@ -372,6 +372,7 @@ fn characters_follow_script_commands() {
         npc:MoveTo(Vector3.new(6, 0, 0))
         npc.MoveToFinished:Wait()
         npc:PlayAnimation("Wave")
+        task.wait(0.5)
         print(npc.Emote, npc.State)
         npc:TakeDamage(30)
         print(npc.Health)

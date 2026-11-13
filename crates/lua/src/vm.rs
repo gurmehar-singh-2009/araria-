@@ -482,9 +482,9 @@ impl Lua {
                 Value::Vector(x, y, z) => {
                     if let Value::Str(s) = key {
                         match s.as_bytes() {
-                            b"X" | b"x" => return Ok(Value::Num(f64::from(*x))),
-                            b"Y" | b"y" => return Ok(Value::Num(f64::from(*y))),
-                            b"Z" | b"z" => return Ok(Value::Num(f64::from(*z))),
+                            b"X" | b"x" => return Ok(crate::value::f32_to_value(*x)),
+                            b"Y" | b"y" => return Ok(crate::value::f32_to_value(*y)),
+                            b"Z" | b"z" => return Ok(crate::value::f32_to_value(*z)),
                             _ => {}
                         }
                     }

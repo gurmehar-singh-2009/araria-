@@ -27,7 +27,7 @@ pub fn vec3_arg(args: &[Value], i: usize, func: &str) -> Result<Vec3> {
 }
 
 fn num(v: f32) -> Value {
-    Value::Num(f64::from(v))
+    araria_lua::f32_to_value(v)
 }
 
 fn method(name: &'static str, f: impl Fn(&mut Lua, &[Value]) -> Result<Ret> + 'static) -> Result<Value> {

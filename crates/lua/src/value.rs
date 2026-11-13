@@ -891,6 +891,20 @@ pub fn fmt_number(n: f64) -> String {
     fmt_g(n, 14)
 }
 
+/// Converts a single-precision engine number (a vector component, a color
+/// channel) to a Lua number that prints the way it was written: whole
+/// values become integers and fractions take their shortest decimal form
+/// (`0.1`, not `0.10000000149011612`).
+pub fn f32_to_value(n: f32) -> Value {
+    if n.fract() == 0.0 && n.abs() < 1e15 {
+        Value::Int(n as i64)
+    } else if n.is_finite() {
+        Value::Num(n.to_string().parse().unwrap_or(f64::from(n)))
+    } else {
+        Value::Num(f64::from(n))
+    }
+}
+
 fn fmt_f32(n: f32) -> String {
     if n.fract() == 0.0 && n.abs() < 1e7 {
         format!("{n:.0}")
