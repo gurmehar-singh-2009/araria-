@@ -21,12 +21,30 @@ pub struct UiCapture {
 #[derive(Resource, Default)]
 pub struct GameViewport(pub Option<Rect>);
 
+/// Which keys drive the built-in character controls.
+#[derive(Resource, Clone)]
+pub struct KeyBindings {
+    pub forward: String,
+    pub back: String,
+    pub left: String,
+    pub right: String,
+    pub jump: String,
+    pub run: String,
+}
+
+impl Default for KeyBindings {
+    fn default() -> Self {
+        KeyBindings { forward: "W".into(), back: "S".into(), left: "A".into(), right: "D".into(), jump: "Space".into(), run: "LeftShift".into() }
+    }
+}
+
 pub struct InputPlugin;
 
 impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<UiCapture>()
             .init_resource::<GameViewport>()
+            .init_resource::<KeyBindings>()
             .add_systems(Update, gather_input.in_set(EngineSet::Input));
     }
 }
@@ -97,6 +115,7 @@ fn gather_input(
     scroll: Res<AccumulatedMouseScroll>,
     capture: Res<UiCapture>,
     viewport: Res<GameViewport>,
+    bindings: Res<KeyBindings>,
     window: Single<&Window, With<PrimaryWindow>>,
     camera: Query<(&Camera, &GlobalTransform), With<GameCamera>>,
 ) {
@@ -110,8 +129,9 @@ fn gather_input(
     }
     let held = |names: &[&str]| names.iter().any(|n| input.keys.contains(*n));
     let axis = |negative: &[&str], positive: &[&str]| f32::from(i8::from(held(positive)) - i8::from(held(negative)));
-    let move_axis = Vec2::new(axis(&["A", "Left"], &["D", "Right"]), axis(&["S", "Down"], &["W", "Up"]));
-    let (jump, run) = (held(&["Space"]), held(&["LeftShift", "RightShift"]));
+    let b = &*bindings;
+    let move_axis = Vec2::new(axis(&[&b.left, "Left"], &[&b.right, "Right"]), axis(&[&b.back, "Down"], &[&b.forward, "Up"]));
+    let (jump, run) = (held(&[&b.jump]), held(&[&b.run]));
     input.move_axis = move_axis;
     input.jump = jump;
     input.run = run;

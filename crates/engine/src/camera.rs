@@ -45,13 +45,34 @@ impl CameraRig {
     }
 }
 
+/// User-controlled rendering options (from the settings screen).
+#[derive(Resource, Clone, PartialEq)]
+pub struct RenderSettings {
+    pub shadows: bool,
+    pub bloom: bool,
+    pub antialiasing: bool,
+    /// Multiplier on each game's fog distances.
+    pub view_distance: f32,
+    /// The user's preferred field of view in degrees; games' own values
+    /// are scaled relative to the 70° default.
+    pub field_of_view: f32,
+    pub invert_y: bool,
+}
+
+impl Default for RenderSettings {
+    fn default() -> Self {
+        RenderSettings { shadows: true, bloom: true, antialiasing: true, view_distance: 1.0, field_of_view: 70.0, invert_y: false }
+    }
+}
+
 pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<CameraRig>()
+            .init_resource::<RenderSettings>()
             .add_systems(Startup, spawn_camera)
-            .add_systems(Update, (update_camera, apply_viewport).in_set(EngineSet::Present));
+            .add_systems(Update, (update_camera, apply_viewport, apply_render_settings).in_set(EngineSet::Present));
     }
 }
 
@@ -72,6 +93,7 @@ fn update_camera(
     game: NonSend<Game>,
     mut rig: ResMut<CameraRig>,
     capture: Res<UiCapture>,
+    render: Res<RenderSettings>,
     time: Res<Time>,
     mut camera: Single<(&mut Transform, &mut Projection), With<GameCamera>>,
 ) {
@@ -90,14 +112,15 @@ fn update_camera(
     };
     if looking {
         rig.yaw = (rig.yaw - mouse_delta.x * rig.sensitivity).rem_euclid(360.0);
-        rig.pitch = (rig.pitch + mouse_delta.y * rig.sensitivity).clamp(-85.0, 85.0);
+        let vertical = if render.invert_y { -mouse_delta.y } else { mouse_delta.y };
+        rig.pitch = (rig.pitch + vertical * rig.sensitivity).clamp(-85.0, 85.0);
     }
     let (transform, projection) = &mut *camera;
 
     let dm = runtime.dm.borrow();
     let settings = dm.get(dm.service("Camera"));
     if let (Some(settings), Projection::Perspective(perspective)) = (settings, &mut **projection) {
-        perspective.fov = settings.f32("FieldOfView").to_radians();
+        perspective.fov = (settings.f32("FieldOfView") * render.field_of_view / 70.0).clamp(20.0, 120.0).to_radians();
     }
 
     let character = runtime.local_character().and_then(|c| dm.get(c));
@@ -164,5 +187,23 @@ fn apply_viewport(
     };
     if !unchanged {
         camera.viewport = target;
+    }
+}
+
+/// Turns bloom and anti-aliasing on or off.
+fn apply_render_settings(
+    mut commands: Commands,
+    settings: Res<RenderSettings>,
+    mut camera: Single<(Entity, &mut Msaa, Has<Bloom>), With<GameCamera>>,
+) {
+    let (entity, msaa, has_bloom) = &mut *camera;
+    let wanted = if settings.antialiasing { Msaa::Sample4 } else { Msaa::Off };
+    if **msaa != wanted {
+        **msaa = wanted;
+    }
+    if settings.bloom && !*has_bloom {
+        commands.entity(*entity).insert(Bloom::NATURAL);
+    } else if !settings.bloom && *has_bloom {
+        commands.entity(*entity).remove::<Bloom>();
     }
 }

@@ -4,7 +4,7 @@ use bevy::light::{CascadeShadowConfigBuilder, GlobalAmbientLight};
 use bevy::pbr::{DistanceFog, FogFalloff};
 use bevy::prelude::*;
 
-use crate::camera::GameCamera;
+use crate::camera::{GameCamera, RenderSettings};
 use crate::{EngineSet, Game, color};
 
 #[derive(Component)]
@@ -37,6 +37,7 @@ pub fn sun_direction(clock_time: f32) -> Vec3 {
 
 fn apply_lighting(
     game: NonSend<Game>,
+    render: Res<RenderSettings>,
     mut sun: Single<(&mut DirectionalLight, &mut Transform), With<Sun>>,
     mut ambient: ResMut<GlobalAmbientLight>,
     mut clear: ResMut<ClearColor>,
@@ -56,7 +57,7 @@ fn apply_lighting(
     let (light, transform) = &mut *sun;
     light.illuminance = 11_000.0 * lighting.f32("Brightness") * daylight.max(0.02);
     light.color = color(lighting.color("SunColor").lerp(araria_core::Color::rgb(1.0, 0.55, 0.3), (1.0 - elevation).powi(4) * daylight));
-    light.shadow_maps_enabled = lighting.bool("Shadows") && daylight > 0.05;
+    light.shadow_maps_enabled = render.shadows && lighting.bool("Shadows") && daylight > 0.05;
     // At night the light comes from the moon, opposite the sun.
     let light_dir = if direction.y < 0.0 { direction } else { -direction };
     **transform = Transform::IDENTITY.looking_to(light_dir, Vec3::Y);
@@ -69,6 +70,7 @@ fn apply_lighting(
     clear.0 = color(horizon);
     for mut fog in &mut fog {
         fog.color = color(lighting.color("FogColor").lerp(night_sky, night * 0.92));
-        fog.falloff = FogFalloff::Linear { start: lighting.f32("FogStart"), end: lighting.f32("FogEnd").max(lighting.f32("FogStart") + 1.0) };
+        let (start, end) = (lighting.f32("FogStart") * render.view_distance, lighting.f32("FogEnd") * render.view_distance);
+        fog.falloff = FogFalloff::Linear { start, end: end.max(start + 1.0) };
     }
 }

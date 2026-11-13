@@ -9,6 +9,8 @@ license.workspace = true
 araria-core = { workspace = true }
 araria-runtime = { workspace = true }
 araria-engine = { workspace = true }
+araria-storage = { workspace = true }
+araria-platform = { workspace = true }
 bevy = { workspace = true }
 bevy_egui = { workspace = true }
 log = { workspace = true }
@@ -16,3 +18,5 @@ log = { workspace = true }
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "=0.2.129"
 console_error_panic_hook = "0.1"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement"] }

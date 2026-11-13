@@ -265,12 +265,16 @@ version = "0.1.0"
 dependencies = [
  "araria-core",
  "araria-engine",
+ "araria-platform",
  "araria-runtime",
+ "araria-storage",
  "bevy",
  "bevy_egui",
  "console_error_panic_hook",
+ "js-sys",
  "log",
  "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
