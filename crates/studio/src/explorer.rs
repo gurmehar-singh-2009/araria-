@@ -149,16 +149,16 @@ impl Explorer {
         if self.expanded.is_empty() {
             self.expanded.insert(dm.workspace());
         }
-        ui.horizontal(|ui| {
-            // Leave room for the insert button so the panel does not grow.
-            let width = (ui.available_width() - 48.0).max(60.0);
-            ui.add(egui::TextEdit::singleline(&mut self.filter).hint_text(format!("{}  Filter objects", icons::MAGNIFYING_GLASS)).desired_width(width).font(theme::regular(12.5)));
+        // Right to left: the button first, then the filter takes exactly the
+        // remaining width (so the panel never grows to fit).
+        ui.allocate_ui_with_layout(vec2(ui.available_width(), 30.0), egui::Layout::right_to_left(egui::Align::Center), |ui| {
             let parent = selection.first().copied().filter(|id| dm.contains(*id)).unwrap_or(dm.workspace());
             ui.menu_button(RichText::new(icons::PLUS).font(theme::regular(14.0)), |ui| {
                 insert_menu(ui, parent, &mut actions);
             })
             .response
             .on_hover_text("Insert an object");
+            ui.add(egui::TextEdit::singleline(&mut self.filter).hint_text(format!("{}  Filter objects", icons::MAGNIFYING_GLASS)).desired_width(ui.available_width()).font(theme::regular(12.5)));
         });
         ui.add_space(4.0);
         let rows = self.rows(dm);
