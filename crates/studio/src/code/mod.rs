@@ -3,4 +3,6 @@
 
 pub mod api;
 pub mod complete;
+pub mod edit;
+pub mod editor;
 pub mod highlight;
