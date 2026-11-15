@@ -6,7 +6,20 @@
     <meta name="description" content="Araria — play and create 3D games in your browser. No account needed." />
     <meta name="theme-color" content="#0e1018" />
     <title>Araria</title>
-    <link data-trunk rel="rust" href="../crates/app/Cargo.toml" data-bin="araria" />
+    <!--
+      Release builds use the size-focused `wasm-release` profile. Current Rust
+      emits bulk-memory, saturating float conversion and other post-MVP
+      WebAssembly features by default (all browsers support them), so
+      wasm-opt must be allowed to accept them.
+    -->
+    <link
+      data-trunk
+      rel="rust"
+      href="../crates/app/Cargo.toml"
+      data-bin="araria"
+      data-cargo-profile-release="wasm-release"
+      data-wasm-opt-params="--enable-bulk-memory --enable-bulk-memory-opt --enable-nontrapping-float-to-int --enable-sign-ext --enable-mutable-globals --enable-reference-types --enable-multivalue"
+    />
     <link data-trunk rel="copy-dir" href="../assets" />
     <style>
       html, body { margin: 0; height: 100%; background: #0e1018; overflow: hidden; }
