@@ -4,6 +4,10 @@
 //
 //   node tools/web-check.mjs --url http://127.0.0.1:8080/ --out shot.png \
 //        [--wait 12] [--keys "w:1500,Space:200"] [--size 1280x720]
+//        [--click "380:369;700:40"] [--after 10]
+//
+// `--click` clicks those points (x:y, separated by `;`) after the page has
+// loaded; `--after` waits that many more seconds before the screenshot.
 //
 // Requires Node 22+ (built-in WebSocket) and a `chromium` binary on PATH.
 
@@ -99,6 +103,14 @@ try {
   for (const type of ["mousePressed", "mouseReleased"]) {
     await send("Input.dispatchMouseEvent", { type, x: width / 2, y: height / 2, button: "left", clickCount: 1 });
   }
+  for (const point of (args.click ?? "").split(";").filter(Boolean)) {
+    const [x, y] = point.split(":").map(Number);
+    for (const type of ["mousePressed", "mouseReleased"]) {
+      await send("Input.dispatchMouseEvent", { type, x, y, button: "left", clickCount: 1 });
+      await sleep(80);
+    }
+    await sleep(400);
+  }
   for (const step of (args.keys ?? "").split(",").filter(Boolean)) {
     const [name, duration] = step.split(":");
     await send("Input.dispatchKeyEvent", keyEvent("keyDown", name));
@@ -106,7 +118,7 @@ try {
     await send("Input.dispatchKeyEvent", keyEvent("keyUp", name));
     await sleep(50);
   }
-  await sleep(500);
+  await sleep(500 + Number(args.after ?? 0) * 1000);
 
   const shot = await send("Page.captureScreenshot", { format: "png" });
   writeFileSync(out, Buffer.from(shot.data, "base64"));
