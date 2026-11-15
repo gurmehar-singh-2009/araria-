@@ -134,6 +134,14 @@ impl Runtime {
         }
     }
 
+    /// Replaces the scene being edited with `scene`, applying only the
+    /// differences (undo, redo). Ignored while playing.
+    pub fn restore_scene(&mut self, scene: &DataModel) {
+        if self.mode == Mode::Edit {
+            self.dm.borrow_mut().restore_from(scene);
+        }
+    }
+
     /// Where `Save:Get` / `Save:Set` keep game progress.
     pub fn set_save_backend(&mut self, backend: Rc<dyn SaveBackend>) {
         self.scripts.set_save_backend(backend.clone());

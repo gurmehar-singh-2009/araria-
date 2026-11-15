@@ -648,6 +648,75 @@ impl DataModel {
         Ok(root_copy)
     }
 
+    /// Makes this tree identical to `target` by applying only the
+    /// differences. Unlike assigning a clone, every difference is journaled,
+    /// so renderers and physics update just what changed. Used by the
+    /// editor's undo and redo.
+    pub fn restore_from(&mut self, target: &DataModel) {
+        // Instances that should no longer exist.
+        let doomed: Vec<InstanceId> = self.instances.keys().copied().filter(|id| !target.instances.contains_key(id)).collect();
+        for id in doomed {
+            if let Some(instance) = self.instances.remove(&id) {
+                if let Some(parent) = instance.parent.and_then(|p| self.instances.get_mut(&p)) {
+                    parent.children.retain(|c| *c != id);
+                }
+                self.watched.remove(&id);
+                self.journal.push(Change::Removed(id));
+            }
+        }
+        // Missing instances, parents before children.
+        let mut order = vec![target.root];
+        order.extend(target.descendants(target.root));
+        for id in &order {
+            let wanted = &target.instances[id];
+            if !self.instances.contains_key(id) {
+                let mut copy = wanted.clone();
+                copy.children.clear();
+                self.instances.insert(*id, copy);
+                if let Some(parent) = wanted.parent.and_then(|p| self.instances.get_mut(&p)) {
+                    parent.children.push(*id);
+                }
+                self.journal.push(Change::Added(*id));
+                continue;
+            }
+            let current = self.instances.get_mut(id).expect("checked above");
+            if current.name != wanted.name {
+                current.name.clone_from(&wanted.name);
+                self.journal.push(Change::Renamed(*id));
+            }
+            for (index, value) in wanted.props.iter().enumerate() {
+                if current.props[index] != *value {
+                    current.props[index] = value.clone();
+                    self.journal.push(Change::Prop(*id, index as u16));
+                }
+            }
+            if current.attributes != wanted.attributes || current.tags != wanted.tags {
+                current.attributes.clone_from(&wanted.attributes);
+                current.tags.clone_from(&wanted.tags);
+                self.journal.push(Change::Attribute(*id));
+            }
+            current.creator = wanted.creator;
+            if current.parent != wanted.parent {
+                let old = current.parent;
+                current.parent = wanted.parent;
+                if let Some(old) = old.and_then(|p| self.instances.get_mut(&p)) {
+                    old.children.retain(|c| c != id);
+                }
+                self.journal.push(Change::Reparented(*id));
+            }
+        }
+        // Sibling order.
+        for id in &order {
+            let wanted = &target.instances[id].children;
+            let current = self.instances.get_mut(id).expect("restored above");
+            if current.children != *wanted {
+                current.children.clone_from(wanted);
+            }
+        }
+        self.next_id = self.next_id.max(target.next_id);
+        self.next_local_id = self.next_local_id.max(target.next_local_id);
+    }
+
     // -------------------------------------------------- journal & events
 
     /// Changes recorded since the journal was last cleared.
@@ -797,5 +866,43 @@ mod tests {
         dm.set(light, "Position", Vec3::new(0.0, 0.0, -2.0)).unwrap();
         let world = dm.world_position(light).unwrap();
         assert!((world - Vec3::new(8.0, 0.0, 0.0)).length() < 1e-4, "{world:?}");
+    }
+
+    #[test]
+    fn restore_applies_only_the_differences() {
+        let mut dm = DataModel::new();
+        let ws = dm.workspace();
+        let kept = dm.create("Part", Some(ws)).unwrap();
+        let moved = dm.create("Part", Some(ws)).unwrap();
+        let folder = dm.create("Folder", Some(ws)).unwrap();
+        let deleted = dm.create("Light", Some(kept)).unwrap();
+        let before = dm.clone();
+
+        // An editing session: tweak, reparent, delete, add, reorder.
+        dm.set(kept, "Size", Vec3::splat(9.0)).unwrap();
+        dm.set_name(kept, "Changed").unwrap();
+        dm.set_parent(moved, Some(folder)).unwrap();
+        dm.destroy(deleted).unwrap();
+        let added = dm.create("Part", Some(ws)).unwrap();
+        dm.add_tag(folder, "x");
+        dm.reorder_child(folder, 0);
+        let after = dm.clone();
+
+        dm.clear_journal();
+        dm.restore_from(&before);
+        assert_eq!(crate::scene::save_scene(&dm), crate::scene::save_scene(&before));
+        assert!(!dm.contains(added) && dm.contains(deleted));
+        assert_eq!(dm.get(deleted).unwrap().parent, Some(kept));
+        assert_eq!(dm.children(ws), before.children(ws));
+        // Untouched instances are not journaled.
+        assert!(dm.journal().iter().all(|c| c.id() != dm.service("Lighting")));
+        assert!(dm.journal().contains(&Change::Removed(added)));
+
+        // Redo.
+        dm.restore_from(&after);
+        assert_eq!(crate::scene::save_scene(&dm), crate::scene::save_scene(&after));
+        // New instances never reuse an id handed out before the undo.
+        let fresh = dm.create("Part", Some(ws)).unwrap();
+        assert!(fresh.0 > added.0);
     }
 }
