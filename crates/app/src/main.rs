@@ -6,7 +6,9 @@ mod session;
 
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{Screenshot, save_to_disk};
-use bevy_egui::{EguiPlugin, EguiPrimaryContextPass};
+use bevy::camera::CameraOutputMode;
+use bevy::render::render_resource::BlendState;
+use bevy_egui::{EguiGlobalSettings, EguiPlugin, EguiPrimaryContextPass, PrimaryEguiContext};
 
 /// Command-line options (native builds only).
 #[derive(Resource, Default)]
@@ -20,6 +22,13 @@ pub struct Options {
     pub hide_ui: bool,
     /// Open the platform on this page (`home`, `discover`, `store`, ...).
     pub page: Option<String>,
+    /// Open this project in the studio (a catalog game id makes a remix first).
+    pub edit: Option<String>,
+    /// Studio start-up helpers for screenshots: select an object by path,
+    /// open a script, start playing.
+    pub select: Option<String>,
+    pub open_script: Option<String>,
+    pub studio_play: bool,
 }
 
 fn parse_options() -> Options {
@@ -40,6 +49,10 @@ fn parse_options() -> Options {
             "--play" => options.play = args.next(),
             "--page" => options.page = args.next(),
             "--hide-ui" => options.hide_ui = true,
+            "--edit" => options.edit = args.next(),
+            "--select" => options.select = args.next(),
+            "--open-script" => options.open_script = args.next(),
+            "--studio-play" => options.studio_play = true,
             _ => {}
         }
     }
@@ -81,12 +94,31 @@ fn main() {
             ..default()
         }))
         .add_plugins(EguiPlugin::default())
+        // The interface gets its own full-window camera, so the 3D camera
+        // can be confined to the studio's viewport.
+        .insert_resource(EguiGlobalSettings { auto_create_primary_context: false, ..default() })
+        .add_systems(Startup, spawn_interface_camera)
         .add_plugins(araria_engine::EnginePlugin)
         .insert_resource(parse_options())
         .add_systems(Startup, session::setup)
         .add_systems(Update, capture_screenshot)
         .add_systems(EguiPrimaryContextPass, session::interface)
         .run();
+}
+
+/// Draws the egui interface over the whole window, on top of the 3D view.
+fn spawn_interface_camera(mut commands: Commands) {
+    commands.spawn((
+        Camera2d,
+        Camera {
+            order: 1,
+            clear_color: ClearColorConfig::Custom(Color::NONE),
+            output_mode: CameraOutputMode::Write { blend_state: Some(BlendState::ALPHA_BLENDING), clear_color: ClearColorConfig::None },
+            ..default()
+        },
+        Msaa::Off,
+        PrimaryEguiContext,
+    ));
 }
 
 fn capture_screenshot(mut commands: Commands, options: Res<Options>, mut frame: Local<u32>, mut exit: MessageWriter<AppExit>) {

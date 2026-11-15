@@ -11,6 +11,7 @@ araria-runtime = { workspace = true }
 araria-engine = { workspace = true }
 araria-storage = { workspace = true }
 araria-platform = { workspace = true }
+araria-studio = { workspace = true }
 bevy = { workspace = true }
 bevy_egui = { workspace = true }
 log = { workspace = true }

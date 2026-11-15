@@ -8,12 +8,14 @@ use std::sync::Arc;
 use araria_core::assets::AssetManifest;
 use araria_engine::{Game, PresentationCommands};
 use araria_engine::camera::{CameraRig, RenderSettings};
-use araria_engine::input::{KeyBindings, UiCapture};
+use araria_engine::input::{GameViewport, KeyBindings, UiCapture};
 use araria_engine::scene_sync::AssetLibrary;
 use araria_platform::widgets::{self, ButtonKind};
 use araria_platform::{Action, GameKey, Library, Page, PlatformUi, Settings, ToastKind, icons, theme};
 use araria_runtime::{LogLevel, ProjectFiles, SaveBackend};
 use araria_storage::Storage;
+use araria_studio::Studio;
+use araria_studio::project::ProjectFolder;
 use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
 
@@ -38,6 +40,8 @@ pub struct Session {
     hud: Hud,
     /// Textures loaded for `ImageLabel` elements, by asset id.
     textures: HashMap<String, (Handle<Image>, egui::TextureId)>,
+    /// The development environment, while a project is open for editing.
+    studio: Option<Studio>,
 }
 
 pub fn setup(world: &mut World) {
@@ -58,6 +62,7 @@ pub fn setup(world: &mut World) {
         started: false,
         hud: Hud::default(),
         textures: HashMap::new(),
+        studio: None,
     });
 }
 
@@ -128,7 +133,14 @@ impl Session {
                 runtime.set_save_backend(Rc::new(GameSaves { storage: self.library.storage().clone(), path: format!("saves/{}-{}.json", if key.origin == araria_platform::Origin::Catalog { "game" } else { "project" }, key.id) }));
                 if editing {
                     self.library.record_project_opened(&key.id);
+                    let folder = ProjectFolder::new(self.library.storage().clone(), key.root());
+                    self.studio = Some(Studio::new(&loaded.manifest.name, folder, assets.0.clone(), runtime));
+                    // Start the editing camera with an overview of the scene.
+                    rig.yaw = 180.0;
+                    rig.pitch = 24.0;
+                    rig.fly_position = Vec3::new(0.0, 14.0, 30.0);
                 } else {
+                    self.studio = None;
                     runtime.start();
                     // Start with the camera behind the character.
                     if let Some(character) = runtime.local_character() {
@@ -147,6 +159,7 @@ impl Session {
 
     fn leave(&mut self, game: &mut Game) {
         game.unload();
+        self.studio = None;
         self.hud.clear();
         self.library.refresh();
         self.screen = Screen::Platform;
@@ -181,6 +194,7 @@ pub fn interface(
     mut render: ResMut<RenderSettings>,
     mut bindings: ResMut<KeyBindings>,
     mut rig: ResMut<CameraRig>,
+    mut viewport: ResMut<GameViewport>,
     time: Res<Time>,
     presentation: Res<PresentationCommands>,
     asset_server: Res<AssetServer>,
@@ -201,6 +215,33 @@ pub fn interface(
         if let Some(id) = &options.play {
             session.launch(&GameKey::catalog(id), false, &mut game, &assets, &mut rig);
         }
+        if let Some(id) = &options.edit {
+            let key = GameKey::project(id);
+            let key = if session.library.find(&key).is_some() {
+                Some(key)
+            } else {
+                // A catalog id: open (or make) the user's remix of it.
+                let existing = session.library.projects.iter().find(|p| p.manifest.description.contains(&format!("remix of {}", session.library.find(&GameKey::catalog(id)).map_or(String::new(), |g| g.manifest.name.clone())))).map(|p| p.key.clone());
+                existing.or_else(|| session.library.create_project(&format!("My {id}"), Some(id)).map_err(|e| error!("cannot create a project from {id}: {e}")).ok())
+            };
+            if let Some(key) = key {
+                session.launch(&key, true, &mut game, &assets, &mut rig);
+                if let (Some(studio), Some(runtime)) = (session.studio.as_mut(), game.runtime.as_mut()) {
+                    if let Some(path) = &options.select {
+                        let found = runtime.dm.borrow().find_by_path(path);
+                        if let Some(found) = found {
+                            studio.selection = vec![found];
+                        }
+                    }
+                    if let Some(path) = &options.open_script {
+                        studio.open_file(path, 1);
+                    }
+                    if options.studio_play {
+                        runtime.start();
+                    }
+                }
+            }
+        }
         session.ui.page = match options.page.as_deref() {
             Some("discover") => Page::Discover,
             Some("store") => Page::Store,
@@ -218,7 +259,60 @@ pub fn interface(
     );
 
     let mut actions = Vec::new();
+    if !matches!(session.screen, Screen::InGame { editing: true, .. }) && viewport.0.is_some() {
+        viewport.0 = None;
+    }
     match &session.screen {
+        Screen::InGame { editing: true, .. } if session.studio.is_some() && game.runtime.is_some() => {
+            let studio = session.studio.as_mut().expect("checked");
+            let runtime = game.runtime.as_mut().expect("checked");
+            let output = studio.show(&mut root, runtime);
+            // egui works in points; the engine wants window pixels (logical).
+            let zoom = ctx.zoom_factor();
+            let area = output.viewport.map(|r| Rect::new(r.min.x * zoom, r.min.y * zoom, r.max.x * zoom, r.max.y * zoom));
+            if viewport.0 != area {
+                viewport.0 = area;
+            }
+            // The game's own interface shows inside the 3D view while playing.
+            let mut over_interface = false;
+            if let (Some(area), true) = (output.viewport, runtime.mode() != araria_runtime::Mode::Edit) {
+                let textures = &mut session.textures;
+                let library = assets.0.clone();
+                let mut texture = |asset: &str| -> Option<egui::TextureId> {
+                    if let Some((_, id)) = textures.get(asset) {
+                        return Some(*id);
+                    }
+                    let file = library.textures.get(asset)?.file.clone();
+                    let handle: Handle<Image> = asset_server.load(file);
+                    let id = contexts.add_image(bevy_egui::EguiTextureHandle::Strong(handle.clone()));
+                    textures.insert(asset.to_string(), (handle, id));
+                    Some(id)
+                };
+                let mut frame = HudFrame { runtime, commands: &presentation.0, area, dt: time.delta_secs(), interactive: true, texture: &mut texture };
+                // Keep the game's interface inside the 3D view.
+                let mut hud_ui = root.new_child(egui::UiBuilder::new().max_rect(area));
+                hud_ui.set_clip_rect(area);
+                over_interface = session.hud.draw(&hud_ui, &mut frame);
+            } else {
+                session.hud.clear();
+            }
+            capture.pointer = output.capture_pointer || over_interface;
+            capture.keyboard = output.capture_keyboard;
+            if let Some((center, radius)) = output.focus {
+                let distance = radius * 2.2 + 4.0;
+                rig.fly_position = center - rig.direction() * distance;
+            }
+            if output.started_playing {
+                if let Some(character) = runtime.local_character() {
+                    rig.yaw = runtime.dm.borrow().get(character).map_or(180.0, |c| c.f32("Facing"));
+                    rig.pitch = 16.0;
+                }
+            }
+            if output.leave {
+                session.leave(&mut game);
+                viewport.0 = None;
+            }
+        }
         Screen::Platform => {
             actions = session.ui.show(&mut root, &mut session.library, &mut session.settings);
             capture.pointer = true;

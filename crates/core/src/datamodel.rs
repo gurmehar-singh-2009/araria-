@@ -164,6 +164,8 @@ pub struct DataModel {
     next_local_id: u64,
     services: HashMap<&'static str, InstanceId>,
     journal: Vec<Change>,
+    /// Changes journaled before the journal was last cleared.
+    cleared: u64,
     events: Vec<Event>,
     /// Instances whose property changes should raise `Changed` events.
     watched: HashSet<InstanceId>,
@@ -185,6 +187,7 @@ impl DataModel {
             next_local_id: InstanceId::LOCAL_BASE,
             services: HashMap::new(),
             journal: Vec::new(),
+            cleared: 0,
             events: Vec::new(),
             watched: HashSet::new(),
         };
@@ -725,7 +728,14 @@ impl DataModel {
     }
 
     pub fn clear_journal(&mut self) {
+        self.cleared += self.journal.len() as u64;
         self.journal.clear();
+    }
+
+    /// A counter that grows with every journaled change, so editors can
+    /// tell whether anything changed since they last looked.
+    pub fn revision(&self) -> u64 {
+        self.cleared + self.journal.len() as u64
     }
 
     /// Queues an event for scripts.
@@ -823,9 +833,12 @@ mod tests {
         let mut dm = DataModel::new();
         let part = dm.create("Part", Some(dm.workspace())).unwrap();
         dm.clear_journal();
+        let revision = dm.revision();
         dm.set(part, "Position", Vec3::new(1.0, 2.0, 3.0)).unwrap();
         dm.set(part, "Position", Vec3::new(1.0, 2.0, 3.0)).unwrap();
         assert_eq!(dm.journal().len(), 1, "identical writes are not journaled");
+        dm.clear_journal();
+        assert_eq!(dm.revision(), revision + 1, "the revision survives clearing the journal");
         assert!(matches!(dm.set(part, "Position", 5.0), Err(ModelError::InvalidValue(_))));
         assert!(matches!(dm.set(part, "Nope", 5.0), Err(ModelError::UnknownProperty { .. })));
         dm.set(part, "Shape", "sphere").unwrap();

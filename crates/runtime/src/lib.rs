@@ -169,6 +169,12 @@ impl Runtime {
         std::mem::take(&mut self.commands)
     }
 
+    /// Queues a request for the presentation layer as if a script had made
+    /// it (the studio previews sounds this way).
+    pub fn queue_command(&mut self, command: Command) {
+        self.commands.push(command);
+    }
+
     pub fn mode(&self) -> Mode {
         self.mode
     }

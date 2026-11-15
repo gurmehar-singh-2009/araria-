@@ -268,6 +268,7 @@ dependencies = [
  "araria-platform",
  "araria-runtime",
  "araria-storage",
+ "araria-studio",
  "bevy",
  "bevy_egui",
  "console_error_panic_hook",
