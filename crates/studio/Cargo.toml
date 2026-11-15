@@ -1,0 +1,17 @@
+[package]
+name = "araria-studio"
+description = "Araria Studio: the built-in development environment — scene editor, explorer, inspector, Lua code editor, terminal and asset browser."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+araria-core = { workspace = true }
+araria-lua = { workspace = true }
+araria-runtime = { workspace = true }
+araria-storage = { workspace = true }
+araria-platform = { workspace = true }
+egui = { version = "0.36", default-features = false }
+serde = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }

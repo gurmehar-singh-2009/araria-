@@ -360,6 +360,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "araria-studio"
+version = "0.1.0"
+dependencies = [
+ "araria-core",
+ "araria-lua",
+ "araria-platform",
+ "araria-runtime",
+ "araria-storage",
+ "egui",
+ "log",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "araria-tools"
 version = "0.1.0"
 dependencies = [
