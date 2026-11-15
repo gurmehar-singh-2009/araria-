@@ -44,7 +44,7 @@
 > The live demonstration is not a main priority, and therefore is not obligated to stay up to date with the repository.
 > It is encouraged for you to clone the repository and host it yourself to play with your friends!
 
-There is no hosted live demo yet. Follow [Getting Started](#getting-started) to run Araria locally.
+A live demo of the project can be found [here](https://gurmehar-singh-2009.github.io/araria-/).
 
 
 ## Performance

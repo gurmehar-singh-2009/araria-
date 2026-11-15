@@ -1,0 +1,86 @@
+# Builds the browser version of Araria and publishes it to GitHub Pages as
+# the live demo, every time `main` changes (or when started by hand from the
+# Actions tab).
+#
+# One-time setup: in the repository's Settings → Pages, set "Source" to
+# "GitHub Actions". The demo is then served at
+# https://<owner>.github.io/<repository>/
+
+name: Deploy live demo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Publishing to Pages needs these; nothing else is granted.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only the newest push is deployed; an older build still running is cancelled.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  TRUNK_VERSION: v0.22.1
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build the WebAssembly release
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      # rustup reads rust-toolchain.toml (nightly + wasm32-unknown-unknown).
+      - name: Install the Rust toolchain
+        run: |
+          rustup toolchain install
+          rustup show
+
+      - name: Cache Cargo builds
+        uses: Swatinem/rust-cache@v2
+        with:
+          # Release WebAssembly artifacts land under target/wasm32-unknown-unknown.
+          cache-targets: true
+          shared-key: wasm-release
+
+      - name: Install Trunk
+        run: |
+          curl -sSfL "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xz -C /usr/local/bin trunk
+          trunk --version
+
+      # Pages serves the site from /<repository>/, so every URL Trunk writes
+      # into index.html must start there.
+      - name: Build
+        run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
+
+      - name: Report the build size
+        run: |
+          {
+            echo "### Live demo build"
+            echo ""
+            echo "| File | Size |"
+            echo "| --- | --- |"
+            find dist -maxdepth 1 -type f \( -name '*.wasm' -o -name '*.js' -o -name '*.html' \) -printf '| %f | %s bytes |\n'
+            echo "| assets/ | $(du -sb dist/assets | cut -f1) bytes |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publish to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
